@@ -1,0 +1,22 @@
+
+{% block content %}
+
+<h1>Menu</h1>
+
+<div class="column">
+    {% for item in menu %}
+    <p>
+        <a href="">
+            {{ item.id }}
+        </a>
+        <a href="">
+            {{ item.title }}
+        </a>
+        <span class="menu-price">
+            ${{ item.price }}.00
+        </span>
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}
