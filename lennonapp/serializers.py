@@ -21,14 +21,16 @@ class MenuItemSerializer(serializers.ModelSerializer):
         deph = 1
 
 class MenuDetailSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=255)
     price = serializers.DecimalField(max_digits=6, decimal_places=2)
-    category = CategorySerializer(read_only=True)
+    description = serializers.CharField(max_length=1000)
+    #category = serializers.StringRelatedField()
+    #category = CategorySerializer(read_only=False)
     
     class Meta:
         model = MenuItem
-        fields = ('id', 'title', 'price', 'image', 'description','category')
+        fields = ('id', 'title', 'price', 'description', 'image', 'category')
 
 class UserCartSerializer(serializers.ModelSerializer):
     unit_price = serializers.DecimalField(max_digits=6, decimal_places=2, source='menuitem.price', read_only=True )

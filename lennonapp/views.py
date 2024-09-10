@@ -99,4 +99,10 @@ class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
 #Utilizacion de viewsets
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = MenuDetailSerializer
-    queryset = MenuItem.objects.all()
+    model = MenuItem
+
+    def get_object(self):
+        return get_object_or_404(self.model, id=self.kwargs.get('pk'))
+    
+    def get_queryset(self, pk=None):
+        return self.model.objects.all()
