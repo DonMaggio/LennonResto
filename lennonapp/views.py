@@ -4,6 +4,7 @@ from django.http import JsonResponse
 
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import generics
@@ -22,6 +23,16 @@ def home(request):
 class MenuItemView(generics.ListCreateAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.queryset.all()
+        return Response({'menu':self.object}, template_name='menu.html')
 
 ##Funcionalidad para obtener (GET), actualizar (PUT o PATCH) y eliminar (DELETE) un único objeto
 class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
@@ -106,3 +117,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self, pk=None):
         return self.model.objects.all()
+    
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
+            return [IsAdminUser()]
+        return [AllowAny()]

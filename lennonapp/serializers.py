@@ -18,7 +18,6 @@ class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ('id', 'title', 'price', 'image', 'category')
-        deph = 1
 
 class MenuDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

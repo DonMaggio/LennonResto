@@ -16,7 +16,7 @@ class MenuItem(models.Model):
     title = models.CharField(max_length=255, db_index=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, db_index=True)
     description = models.TextField(max_length=1000)
-    image = models.ImageField(upload_to='lennonapp/files/images', blank=True, null=True)
+    image = models.ImageField(upload_to='lennonapp/images', blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -38,7 +38,7 @@ class Cart(models.Model):
         unique_together = ('menuitem', 'user')
 
     def __str__(self):
-        return f'{self.user}'
+        return f'{self.user} -> {self.menuitem}'
 
 class Order(models.Model):
     user =models.ForeignKey(User, on_delete=models.CASCADE)
@@ -48,7 +48,7 @@ class Order(models.Model):
     date= models.DateField(db_index=True)
 
     def __str__(self):
-        return f'{self.user} {self.pk}'
+        return f'{self.user} Total: {self.total} ({self.pk})'
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -58,7 +58,7 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f'{self.order}'
+        return f'{self.menuitem}'
 
     class Meta:
         unique_together = ('order', 'menuitem')

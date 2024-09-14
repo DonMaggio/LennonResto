@@ -1,22 +1,20 @@
+{% set categorias = ['Entrada', 'Plato Principal', 'Postre'] %}
 
-{% block content %}
-
-<h1>Menu</h1>
-
-<div class="column">
-    {% for item in menu %}
-    <p>
-        <a href="">
-            {{ item.id }}
-        </a>
-        <a href="">
-            {{ item.title }}
-        </a>
-        <span class="menu-price">
-            ${{ item.price }}.00
-        </span>
-    </p>
+<ul>
+    {% for categoria in categorias %}
+        <h2>{{ categoria }}</h2>
+        {% for item in data if item.category.title == categoria %}
+            <li>
+                <h3>{{ item.title }}</h3>
+                <p>Precio: {{ item.price }}</p>
+                {% if item.image %}
+                    <img src="{{ item.image }}" alt="{{ item.title }}" width="100">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+            </li>
+        {% else %}
+            <li>No items found in {{ categoria }}</li>
+        {% endfor %}
     {% endfor %}
-</div>
-
-{% endblock %}
+</ul>
