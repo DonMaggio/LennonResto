@@ -138,7 +138,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     "DEFAULT_RENDERER_CLASSES":[
-        'rest_framework.renderers.BrowsableAPIRenderer',
+    'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer']
 }
 
