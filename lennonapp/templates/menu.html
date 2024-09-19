@@ -1,337 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Menu</title>
-    <link rel="stylesheet" href="menu.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-</head>
 
-<style>
+{% extends 'nav.html' %}
 
-*{
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+{% block title %}Lennon Resto Menu{% endblock %}
 
-}
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/menu.css' %}">  <!-- CSS específico para main.html -->
+{% endblock %}
 
-body{
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 500;
-    background-color: #f8f8f8;
-    color: #101632dd;
-    container-name: body;
-    container-type: inline-size;
-    /*color:#3f7c46;*/
-    
-}
+{% block content %}
 
-body.no-scroll {
-    overflow: hidden;
-}
-
-body, div, ul, nav, header, footer, a, li, label,section{
-    margin: 0;
-    padding: 0;
-}
-
-
-
-.header{
-    container-name: header;
-    container-type: inline-size;
-    background-color: #fcfcfc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    container-type: inline-size;
-    container-name: header;
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    font-size: 24px;
-    height: 100%;
-
-}
-
-.header__open-nav-button{
-    color: #262626;
-    font-size: 3rem;
-    font-weight: 500;
-    position: absolute;
-    right: 10px;
-    
-}
-.header__nav, .header__rigth{
-    display: none;
-    background-color: #fcfcfc;
-    position: absolute;
-    width: 100vw;
-    top: 0;
-    z-index: -1
-}
-
-.header__checkbox{
-    display: none;
-}
-
-.header__nav-list, .header__rigth-list{
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    margin: auto;
-    justify-content: space-evenly;
-
-}
-
-.header__checkbox:checked ~ .header__nav {
-    display: flex;   
-    height: 100dvh;                   
-}
-
-
-.header__logo{
-    max-width: 100%;
-    width: 64px;
-    margin: 5px;
-}
-
-.header__logo-img{
-    max-width: 5rem;
-    margin-left: 30px;
-}
-
-.header__nav-item{
-    list-style: none;
-}
-
-.header__nav-item a{
-    color: #262626;
-}
-
-.header__nav-item a:not(:is(:hover,:active)){
-    text-decoration: none;
-}
-
-/* ---- HEADER QUERIES ---- */
-
-@container header (min-width: 600px){
-    .header{
-        height: 8vh
-    }
-
-    .header__nav{
-        display: block;
-        position: static;
-        width: auto;
-        justify-content: space-between;
-    }
-    
-    .header__nav-list{
-        flex-direction: row;
-        height: auto;
-        width: auto;
-        gap: 70px;
-        padding: 15px;
-        
-    }
-
-    .header__rigth{
-        display: block;
-        position: static;
-        width: auto;
-        justify-content: space-between;
-        margin-right: 40px;
-    }
-
-    .header__rigth-list{
-        flex-direction: row;
-        height: auto;
-        width: auto;
-        gap: 70px;
-        padding: 15px;
-    }
-
-    .header__open-nav-button{
-        display: none;
-    }
-}
-
-/* ---- HEADER ENDS ---- */
-
-
-.nav{
-    width: 100% !important;
-    height: auto !important;
-}
-
-@container body (min-width: 600px){
-    .nav{
-        height: 10vh !important;
-    }
-}
-
-.category{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    container-name: category;
-    container-type: inline-size;
-}
-
-.category__title{
-    font-size: 2.3rem;
-    padding: 20px;
-    margin-bottom: 0;
-}
-
-.category__card-container{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(auto-fill, auto);
-    max-width: 1000px;
-    margin: auto;
-    width: 100%;
-    gap: 12px;
-    padding: 12px;
-}
-
-.category__card{
-    display: grid;
-    grid-template-rows: 0.5fr 3rem 2rem 2.5rem;
-    border-radius: 10px;
-    border: 2px, solid, #ddd;
-}
-
-.category__card-img{
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    max-height: 200px;
-    border-radius: 9px  9px 0px 0px;
-    aspect-ratio: 9/16
-}
-
-.category__card-name{
-    font-size: 1.5rem;
-}
-
-.category__card-desciption{
-    font-size: 0.8rem;
-
-}
-
-@container category (max-width: 55rem){
-    .category__card-container{
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@container category (max-width: 600px){
-    .category__card-container{
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/*Capa superposicion*/
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Oscurecer el fondo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Asegura que esté sobre todo el contenido */
-    visibility: hidden; /* Oculta el overlay por defecto */
-}
-
-/*Modal ventana emergente*/
-
-.modal {
-    position: relative;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    max-width: 90%;
-    text-align: center;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    
-}
-
-/* Botón para abrir la modal */
-.open-modal-btn {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: auto;
-    height: 2rem;
-    cursor: pointer;
-    margin: auto;
-}
-
-.close-btn{
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: transparent;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.modal-btn {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    width: auto;
-    height: 2rem;
-    cursor: pointer;
-    margin: auto;
-}
-</style>
-
-<body>
-    <header class="header">
-        <input type="checkbox" class="header__checkbox" id="open-menu">
-        <label for="open-menu"  class="header__open-nav-button" role="button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#262626"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></label>
-        <div class="header__logo-container">
-            <img src="img/lennonglasses.png" alt="logo de Lennon" class="header__logo-img">
-        </div>
-        <nav class="header__nav">
-            <ul class="header__nav-list">
-                <li class="header__nav-item"><a href="#profile">Nosotros</a></li>
-                <li class="header__nav-item"><a href="#portfolio">Menu</a></li>
-            </ul>
-        </nav>
-        <div class="header__rigth">
-            <ul class="header__rigth-list">
-                <li class="header__nav-item"><a href="#form"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#262626"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg></a></li>
-            </ul>
-        </div>
-    </header>
-
-    <div class="category">
-        <h2 class="category__title">Entrada</h2>
+    <section id="menu" class="category">
+        <h2 class="category__title" id="first_category">Entrada</h2>
         <div>
             <ul class="category__card-container">
             {% for item in menu %}
@@ -355,11 +35,11 @@ body, div, ul, nav, header, footer, a, li, label,section{
             {% endfor %}
             </ul>
         </div>
-    </div>
-    <div class="category">
+    </section>
+    <section class="category">
         <h2 class="category__title">Plato Principal</h2>
-        
         <div>
+            
             <ul class="category__card-container">
             {% for item in menu %}
                 {% if item.category.title == 'Plato Principal' %}
@@ -382,8 +62,8 @@ body, div, ul, nav, header, footer, a, li, label,section{
             {% endfor %}
             </ul>
         </div>
-    </div>
-    <div class="category">
+    </section>
+    <section class="category">
         <h2 class="category__title">Postre</h2>
         
         <div>
@@ -409,30 +89,18 @@ body, div, ul, nav, header, footer, a, li, label,section{
             {% endfor %}
             </ul>
         </div>
-    </div>
+    </section>
 
-</body>
+{% endblock %}
 
-
-<script>
-    // En el JavaScript
-    document.querySelectorAll('.open-modal-btn').forEach((button, index) => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.overlay')[index].style.visibility = 'visible';
-        document.body.classList.add('no-scroll'); // Bloquear el scroll
-    });
-});
-
-document.querySelectorAll('.close-btn').forEach((button, index) => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.overlay')[index].style.visibility = 'hidden';
-        document.body.classList.remove('no-scroll'); // Restaurar el scroll
-    });
-});
-</script>
+{% block extra_scripts %}
+    <script src="{% static 'js/menu.js' %}"></script>  <!-- Script específico para main.html -->
+{% endblock %}
 
 
 
+
+<!--
 
 
     /* Scripts para abrir y cerrar el modal
@@ -448,30 +116,4 @@ document.querySelectorAll('.close-btn').forEach((button, index) => {
         overlay.style.visibility = 'hidden';
     });*/
 
-
-=======
-    <title>Document</title>
-</head>
-<body>
-
-
-<ul>
-        <h2> categoria </h2>
-        {% load rest_framework %}
-        {% for item in menu %}
-            <li>
-                <h3>{{ item.title }}</h3>
-                <p>Precio: {{ item.image }}</p>
-                {% if item.image %}
-                    <img src="{{ item.image }}" alt="{{ item.title }}" width="100">
-                {% else %}
-                    <p>{{ item.image }}</p>
-                {% endif %}
-            </li>
-        {% endfor %}
-
-</ul>
-</body>
-</html>
->>>>>>> ac2315050c80fce95e8801c11a3407b4cf808206
-
+-->
