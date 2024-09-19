@@ -89,7 +89,7 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         total_price = sum(item.price for item in queryset)
-        return Response({'cart':serializer.data, 'total_price':total_price}, template_name='old_cart.html')
+        return Response({'cart':serializer.data, 'total_price':total_price}, template_name='cart.html')
 
 ## View de las ordenes que estan creadas para el staff
 # GET (listar órdenes) y POST (crear órdenes)
