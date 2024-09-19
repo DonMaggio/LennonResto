@@ -1,20 +1,29 @@
-{% set categorias = ['Entrada', 'Plato Principal', 'Postre'] %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
 
 <ul>
-    {% for categoria in categorias %}
-        <h2>{{ categoria }}</h2>
-        {% for item in data if item.category.title == categoria %}
+        <h2> categoria </h2>
+        {% load rest_framework %}
+        {% for item in menu %}
             <li>
                 <h3>{{ item.title }}</h3>
-                <p>Precio: {{ item.price }}</p>
+                <p>Precio: {{ item.image }}</p>
                 {% if item.image %}
                     <img src="{{ item.image }}" alt="{{ item.title }}" width="100">
                 {% else %}
-                    <p>No image available</p>
+                    <p>{{ item.image }}</p>
                 {% endif %}
             </li>
-        {% else %}
-            <li>No items found in {{ categoria }}</li>
         {% endfor %}
-    {% endfor %}
+
 </ul>
+</body>
+</html>
+
