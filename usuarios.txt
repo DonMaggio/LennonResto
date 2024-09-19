@@ -1,0 +1,11 @@
+Usuario: admin
+Contraseña: admin
+{
+  "token": "1946b8b64dec3a89c180229c2e99ed397cb62b12"
+}
+
+Usuario: Alan
+Contraseña: botellapsa
+{
+  "token": "5f6e21f2bd290e61a992949a4da6c7b2bf0a5dbb"
+}

@@ -4,40 +4,49 @@ from django.http import JsonResponse
 
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
 
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from django.contrib.auth.models import User, Group
+
 from rest_framework import generics
-
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes
 
-from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer
+from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer, UserSerializer
 from .models import MenuItem, Cart, Order, OrderItem
 
 from decimal import Decimal
 
-# Create your views here.
+## View generica
 def home(request):
     return render(request, 'home.html')
 
+@api_view()
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({'message':'Mensaje secreto'})
+
+## View del menu completo
 class MenuItemView(generics.ListCreateAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
-    renderer_classes = [TemplateHTMLRenderer]
+    #renderer_classes = [TemplateHTMLRenderer]
 
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
             return [IsAdminUser()]
         return [AllowAny()]
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.queryset.all()
-        return Response({'menu':self.object}, template_name='menu.html')
+    #def get(self, request, *args, **kwargs):
+    #    self.object = self.queryset.all()
+    #    return Response({'menu':self.object}, template_name='menu.html')
 
-##Funcionalidad para obtener (GET), actualizar (PUT o PATCH) y eliminar (DELETE) un único objeto
+## View del detalle de cada item del menu
 class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuDetailSerializer
+
     def get_permissions(self): #sobrescribe los permisos predeterminados de la vista
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
             return [IsAdminUser()] ## Solo permite estas acciones a los administradores
@@ -49,9 +58,11 @@ class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
         menuitem.save()
         return JsonResponse(status=200, data={'message':'Featured status of {} changed to {}'.format(str(menuitem.title) ,str(menuitem.featured))})
 
-
+## View para visualizar los items del carrito por usuario
 class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
     serializer_class = UserCartSerializer
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
         cart = Cart.objects.filter(user=self.request.user)
@@ -73,15 +84,24 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
         else:
             Cart.objects.filter(user=request.user).delete()
             return Response(status=status.HTTP_204_NO_CONTENT, data={'message': 'All items removed from cart'})
+        
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'cart':serializer.data}, template_name='cart.html')
 
-
+## View de las ordenes que estan creadas para el staff
+# GET (listar órdenes) y POST (crear órdenes)
 class OrdersView(generics.ListCreateAPIView):
     serializer_class = UserOrdersSerializer
-    def perform_create(self, serializer): #sobrescribe la lógica predeterminada de cómo se crea un pedido
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer): #sobrescribe la lógica predeterminada de cómo se crea un pedido. Se ejecuta con POST.
         cart_items = Cart.objects.filter(user=self.request.user)
         total = self.calculate_total(cart_items)
-        order = serializer.save(user=self.request.user, total=total)
-        for cart_item in cart_items:
+        order = serializer.save(user=self.request.user, total=total) #Creación de nuevo objeto Order
+
+        for cart_item in cart_items: #Creación de los item en OrderItem por cada item del carrito del usuario
             OrderItem.objects.create(menuitem=cart_item.menuitem, quantity=cart_item.quantity,
                                     unit_price=cart_item.unit_price, price=cart_item.price, order=order)
             cart_item.delete()
@@ -97,17 +117,72 @@ class OrdersView(generics.ListCreateAPIView):
         for item in cart_items:
             total += item.price
         return total
-    
+
+## View de una sola orden
 class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserOrdersSerializer
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='manager').exists():
             return Order.objects.all()
         return Order.objects.filter(user=user)
-    
 
-#Utilizacion de viewsets
+
+## Vistas para la gestion de usuarios ##
+class ManagerUsersView(generics.ListCreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        # Get the 'manager' group
+        manager_group = Group.objects.get(name='Manager')
+        # Get the users in the 'manager' group
+        queryset = User.objects.filter(groups=manager_group)
+        return queryset
+
+    def perform_create(self, serializer):
+        # Assign the user to the 'manager' group
+        manager_group = Group.objects.get(name='Manager')
+        user = serializer.save()
+        user.groups.add(manager_group)
+
+class ManagerSingleUserView(generics.RetrieveDestroyAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        # Get the 'manager' group
+        manager_group = Group.objects.get(name='Manager')
+        # Get the users in the 'manager' group
+        queryset = User.objects.filter(groups=manager_group)
+        return queryset
+
+class DeliveryUserView(generics.ListCreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        delivery_group = Group.objects.get(name='Delivery')
+        queryset = User.objects.filter(groups=delivery_group)
+        return queryset
+
+    def perform_create(self, serializer):
+        delivery_group = Group.objects.get(name='Delivery')
+        user = serializer.save()
+        user.groups.add(delivery_group)
+
+class DeliveryUserSingleView(generics.RetrieveDestroyAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        delivery_group = Group.objects.get(name='Delivery')
+        queryset = User.objects.filter(groups=delivery_group)
+        return queryset
+
+
+## Utilizacion de viewsets ##
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = MenuDetailSerializer
     model = MenuItem

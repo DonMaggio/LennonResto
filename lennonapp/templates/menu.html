@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Menu</title>
     <link rel="stylesheet" href="menu.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -448,4 +449,29 @@ document.querySelectorAll('.close-btn').forEach((button, index) => {
     });*/
 
 
+=======
+    <title>Document</title>
+</head>
+<body>
+
+
+<ul>
+        <h2> categoria </h2>
+        {% load rest_framework %}
+        {% for item in menu %}
+            <li>
+                <h3>{{ item.title }}</h3>
+                <p>Precio: {{ item.image }}</p>
+                {% if item.image %}
+                    <img src="{{ item.image }}" alt="{{ item.title }}" width="100">
+                {% else %}
+                    <p>{{ item.image }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+
+</ul>
+</body>
+</html>
+>>>>>>> ac2315050c80fce95e8801c11a3407b4cf808206
 

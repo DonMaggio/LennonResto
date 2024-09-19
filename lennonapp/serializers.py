@@ -9,9 +9,6 @@ class CategorySerializer(serializers.ModelSerializer): #serializador para relaci
         fields = ['title']
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=255)
-    price = serializers.DecimalField(max_digits=6, decimal_places=2)
     category = CategorySerializer()
     #category = serializers.StringRelatedField() => me muestra lo definido en __str__ del model Category que es su ForeingKey
     
@@ -21,9 +18,6 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 class MenuDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    title = serializers.CharField(max_length=255)
-    price = serializers.DecimalField(max_digits=6, decimal_places=2)
-    description = serializers.CharField(max_length=1000)
     #category = serializers.StringRelatedField()
     #category = CategorySerializer(read_only=False)
     
@@ -72,3 +66,16 @@ class OrderItemSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'menuitem': {'read_only': True}
         }
+
+
+class UserSerializer(serializers.ModelSerializer):
+    Date_Joined = serializers.SerializerMethodField()
+    date_joined = serializers.DateTimeField(write_only=True, default=datetime.now)
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'date_joined', 'Date_Joined']
+
+    def get_Date_Joined(self, obj):
+        return obj.date_joined.strftime('%Y-%m-%d')
