@@ -1,0 +1,177 @@
+*{
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+
+}
+
+body{
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+    background-color: #f8f8f8;
+    color: #101632dd;
+    container-name: body;
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    /*color:#3f7c46;*/
+    
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+body, div, ul, nav, header, footer, a, li, label,section{
+    margin: 0;
+    padding: 0;
+}
+
+
+.nav{
+    width: 100% !important;
+    height: auto !important;
+}
+
+@container body (min-width: 600px){
+    .nav{
+        height: 10vh !important;
+    }
+}
+
+.category{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    container-name: category;
+    container-type: inline-size;
+}
+
+#first_category{
+    margin-top: 70px; /*para que no quede escondida debajo del nav*/
+}
+
+.category__title{
+    font-size: 2.3rem;
+    padding: 20px;
+    margin-bottom: 0;
+}
+
+.category__card-container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(auto-fill, auto);
+    max-width: 1000px;
+    margin: auto;
+    width: 100%;
+    gap: 12px;
+    padding: 12px;
+}
+
+.category__card{
+    display: grid;
+    grid-template-rows: 0.5fr 3rem 2rem 2.5rem;
+    border-radius: 10px;
+    border: 2px, solid, #ddd;
+}
+
+.category__card-img{
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    max-height: 200px;
+    border-radius: 9px  9px 0px 0px;
+    aspect-ratio: 9/16
+}
+
+.category__card-name{
+    font-size: 1.5rem;
+}
+
+.category__card-desciption{
+    font-size: 0.8rem;
+
+}
+
+@container category (max-width: 55rem){
+    .category__card-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@container category (max-width: 600px){
+    .category__card-container{
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/*Capa superposicion*/
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Oscurecer el fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegura que esté sobre todo el contenido */
+    visibility: hidden; /* Oculta el overlay por defecto */
+}
+
+/*Modal ventana emergente*/
+
+.modal {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    min-width: 35vw;
+    max-width: 90%;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+}
+
+/* Botón para abrir la modal */
+.open-modal-btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: auto;
+    height: 2rem;
+    cursor: pointer;
+    margin: auto;
+}
+
+.close-btn{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.modal-btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: auto;
+    height: 2rem;
+    cursor: pointer;
+    margin: auto;
+}

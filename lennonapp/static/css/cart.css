@@ -1,0 +1,97 @@
+*{
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+
+}
+
+body{
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+    background-color: #f8f8f8;
+    color: #101632dd;
+    container-name: body;
+    container-type: inline-size;
+    min-height: 100vh;
+    /*color:#3f7c46;*/
+    
+}
+
+body, div, ul, nav, header, footer, a, li, label,section{
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+
+#cart {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+h1, h2 {
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+.cart__item-container{
+    padding: 0 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.cart__item-container-total{
+    font-weight: 700;
+
+}
+
+#cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#cart-items li {
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+}
+
+#cart-items li:last-child {
+    border-bottom: none;
+}
+
+#total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    text-align: right;
+    padding-right: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: auto;;
+}
+
+button:hover {
+    background-color: #007bffdd;
+}
