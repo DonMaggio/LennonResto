@@ -14,7 +14,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer, UserSerializer
-from .models import MenuItem, Cart, Order, OrderItem
+from .models import MenuItem, Cart, Order, OrderItem, Category
 
 from decimal import Decimal
 
@@ -33,7 +33,7 @@ class MenuItemView(generics.ListCreateAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     renderer_classes = [TemplateHTMLRenderer]
-    template_name='menu.html'
+    template_name='old_menu.html'
 
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
@@ -42,7 +42,8 @@ class MenuItemView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.queryset.all()
-        return Response({'menu':self.object})
+        categorias = Category.objects.all()
+        return Response({'menu':self.object, 'cat':categorias})
 
 ## View del detalle de cada item del menu
 class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
