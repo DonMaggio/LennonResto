@@ -112,9 +112,9 @@ class OrdersView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.groups.filter(name='manager').exists():
-            return Order.objects.all()
-        return Order.objects.filter(user=user)
+        if user.groups.filter(name='Manager').exists():
+            return Order.objects.filter(status=False)
+        return Order.objects.filter(user=user, status=False)
 
     def calculate_total(self, cart_items):
         total = Decimal(0)
@@ -128,7 +128,7 @@ class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
-        if user.groups.filter(name='manager').exists():
+        if user.groups.filter(name='Manager').exists():
             return Order.objects.all()
         return Order.objects.filter(user=user)
 
