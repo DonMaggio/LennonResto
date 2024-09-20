@@ -102,6 +102,11 @@ header{
     list-style: none;
 }
 
+.saludo{
+    font-size: 1rem;
+    margin: auto;
+}
+
 .header__nav-item a{
     color: #262626;
 }
@@ -147,9 +152,11 @@ header{
         flex-direction: row;
         height: auto;
         width: auto;
-        gap: 70px;
+        gap: 15px;
         padding: 12px;
     }
+
+
 
     .header__open-nav-button{
         display: none;
@@ -159,13 +166,3 @@ header{
 /* ---- HEADER ENDS ---- */
 
 
-.nav{
-    width: 100% !important;
-    height: auto !important;
-}
-
-@container body (min-width: 600px){
-    .nav{
-        height: 10vh !important;
-    }
-}

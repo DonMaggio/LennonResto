@@ -1,17 +1,20 @@
 
 {% extends 'nav.html' %}
+{% csrf_token %}
+
+{% block extra_meta %}<meta name="csrf-token" content="{% csrf_token %}">{% endblock %}
 
 {% block title %}Lennon Resto Menu{% endblock %}
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/menu.css' %}">  <!-- CSS específico para main.html -->
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">  <!-- CSS específico para main.html -->
 {% endblock %}
 
 {% block content %}
 
     <section id="menu" class="category">
-        <h2 class="category__title" id="first_category">Entrada</h2>
+        <h2 class="category__title" id="first_category">ENTRADAS</h2>
         <div>
             <ul class="category__card-container">
             {% for item in menu %}
@@ -20,15 +23,25 @@
                     <img src= "../media/{{ item.image }}" alt="" class="category__card-img">
                     <h4 class="category__card-name">{{ item.title }}</h4>
                     <p class="category__card-desciption"> ${{ item.price }}</p>
-                    <button class="open-modal-btn" id="open-btn">Agregar al carrito</button>
+                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
                 </li>
                 <div class="overlay" id="overlay">
                     <div class="modal">
                         <button class="close-btn"> X </button>
                         <img src='../media/{{item.image}}' alt="" class="category__card-img">
                         <h2>{{ item.title }}</h2>
-                        <p> $ {{ item.price }}</p>
-                        <button class="modal-btn">Agregar</button>
+                        <p>{{ item.description }}</p>
+                        <div class="modal-lastline">
+                            <div class="modal-lastline-quantity">
+                                <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
+                                <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
+                                <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
+                            </div>
+                            
+                            <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
+                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
@@ -37,7 +50,7 @@
         </div>
     </section>
     <section class="category">
-        <h2 class="category__title">Plato Principal</h2>
+        <h2 class="category__title">PRINCIPALES</h2>
         <div>
             
             <ul class="category__card-container">
@@ -47,15 +60,25 @@
                     <img src='../media/{{item.image}}' alt="" class="category__card-img">
                     <h4 class="category__card-name">{{ item.title }}</h4>
                     <p class="category__card-desciption"> $ {{ item.price }}</p>
-                    <button class="open-modal-btn" id="open-btn">Agregar al carrito</button>
+                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
                 </li>
                 <div class="overlay" id="overlay">
                     <div class="modal">
                         <button class="close-btn"> X </button>
                         <img src='../media/{{item.image}}' alt="" class="category__card-img">
                         <h2>{{ item.title }}</h2>
-                        <p> $ {{ item.price }}</p>
-                        <button class="modal-btn">Agregar</button>
+                        <p>{{ item.description }}</p>
+                        <div class="modal-lastline">
+                            <div class="modal-lastline-quantity">
+                                <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
+                                <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
+                                <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
+                            </div>
+                            
+                            <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
+                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
@@ -64,7 +87,7 @@
         </div>
     </section>
     <section class="category">
-        <h2 class="category__title">Postre</h2>
+        <h2 class="category__title">POSTRES</h2>
         
         <div>
             <ul class="category__card-container">
@@ -74,15 +97,26 @@
                     <img src='../media/{{item.image}}' alt="" class="category__card-img">
                     <h4 class="category__card-name">{{ item.title }}</h4>
                     <p class="category__card-desciption"> $ {{ item.price }}</p>
-                    <button class="open-modal-btn" id="open-btn">Agregar al carrito</button>
+                    
+                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
                 </li>
                 <div class="overlay" id="overlay">
                     <div class="modal">
                         <button class="close-btn"> X </button>
                         <img src='../media/{{item.image}}' alt="" class="category__card-img">
                         <h2>{{ item.title }}</h2>
-                        <p> $ {{ item.price }}</p>
-                        <button class="modal-btn">Agregar</button>
+                        <p>{{ item.description }}</p>
+                        <div class="modal-lastline">
+                            <div class="modal-lastline-quantity">
+                                <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
+                                <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
+                                <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
+                            </div>
+                            
+                            <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
+                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">(${{ item.price }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
