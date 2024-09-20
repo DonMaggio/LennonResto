@@ -33,7 +33,7 @@ class MenuItemView(generics.ListCreateAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     renderer_classes = [TemplateHTMLRenderer]
-    template_name='old_menu.html'
+    template_name='menu.html'
 
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
