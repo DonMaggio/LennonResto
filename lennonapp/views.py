@@ -29,9 +29,11 @@ def secret(request):
 
 ## View del menu completo
 class MenuItemView(generics.ListCreateAPIView):
+    format = None
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     renderer_classes = [TemplateHTMLRenderer]
+    template_name='menu.html'
 
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
@@ -40,7 +42,7 @@ class MenuItemView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.queryset.all()
-        return Response({'menu':self.object}, template_name='menu.html')
+        return Response({'menu':self.object})
 
 ## View del detalle de cada item del menu
 class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
@@ -63,6 +65,7 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
     serializer_class = UserCartSerializer
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
+    template_name='cart.html'
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
         cart = Cart.objects.filter(user=self.request.user)
@@ -89,7 +92,7 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         total_price = sum(item.price for item in queryset)
-        return Response({'cart':serializer.data, 'total_price':total_price}, template_name='cart.html')
+        return Response({'cart':serializer.data, 'total_price':total_price})
 
 ## View de las ordenes que estan creadas para el staff
 # GET (listar órdenes) y POST (crear órdenes)

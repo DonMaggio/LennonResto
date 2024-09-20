@@ -120,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -137,9 +137,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    "DEFAULT_RENDERER_CLASSES":[
-    'rest_framework.renderers.BrowsableAPIRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer']
+    #"DEFAULT_RENDERER_CLASSES":[
+    #'rest_framework.renderers.TemplateHTMLRenderer',
+    #'rest_framework.renderers.BrowsableAPIRenderer']
 }
 
 DJOSER = {
