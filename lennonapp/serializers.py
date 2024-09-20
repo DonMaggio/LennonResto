@@ -11,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer): #serializador para relaci
 class MenuItemSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     image = serializers.ImageField(required=True)
+    description = serializers.CharField(required=True)
     #category = serializers.StringRelatedField() => me muestra lo definido en __str__ del model Category que es su ForeingKey
     
     class Meta:
@@ -20,6 +21,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
 class MenuDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     image = serializers.ImageField(required=True)
+    description = serializers.CharField(required=True)
     #category = serializers.StringRelatedField()
     #category = CategorySerializer(read_only=False)
     
