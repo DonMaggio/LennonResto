@@ -14,7 +14,7 @@ class Category(models.Model):
 
 class MenuItem(models.Model):
     title = models.CharField(max_length=255, db_index=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, db_index=True)
+    price = models.DecimalField(max_digits=6, decimal_places=0, db_index=True)
     description = models.TextField(max_length=1000)
     image = models.ImageField(upload_to='lennonapp/images', blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)

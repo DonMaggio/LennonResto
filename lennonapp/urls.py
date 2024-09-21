@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview, ManagerUsersView, ManagerSingleUserView, DeliveryUserView, DeliveryUserSingleView
+from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview, ManagerUsersView, ManagerSingleUserView, DeliveryUserView, DeliveryUserSingleView, UserView
 from rest_framework.documentation import include_docs_urls
 
 #View Sets
@@ -14,8 +14,8 @@ router.register(r'products', ProductViewSet, basename='productos')
 
 
 urlpatterns = [
-    #path('home', views.home, name='home'),
-    path('secret', views.secret),
+    path('home', views.home, name='home'),
+    #path('secret', views.secret),
 
     #rutas para el menu
     path('menu', MenuItemView.as_view()),
@@ -25,6 +25,7 @@ urlpatterns = [
     path('orders/<int:pk>', SingleOrderview.as_view()),
 
     #gestion de usuarios
+    path('create/user', UserView.as_view()),
     path('groups/manager/users', ManagerUsersView.as_view()),
     path('groups/manager/users/<int:pk>', ManagerSingleUserView.as_view()),
     path('groups/delivery/users', DeliveryUserView.as_view()),

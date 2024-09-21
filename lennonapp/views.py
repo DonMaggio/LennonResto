@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
 
-from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User, Group
 
 from rest_framework import generics
@@ -65,8 +65,8 @@ class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
 class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
     serializer_class = UserCartSerializer
     permission_classes = [IsAuthenticated]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name='cart.html'
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name='cart.html'
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
         cart = Cart.objects.filter(user=self.request.user)
@@ -79,15 +79,28 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
         price = quantity * item.price
         serializer.save(user=self.request.user, price=price)
 
+    #def delete(self, request, *args, **kwargs):
+    #    menuitem_id = request.data.get('menuitem')
+    #    if menuitem_id:
+    #        cart_item = get_object_or_404(Cart, user=request.user, menuitem__id=menuitem_id)
+    #        cart_item.delete()
+    #        return Response(status=status.HTTP_200_OK, data={'message': 'Item removed from cart'})
+    #    return Response(status=status.HTTP_400_BAD_REQUEST, data={'message':'No item id provided'})
+    
     def delete(self, request, *args, **kwargs):
         menuitem_id = request.data.get('menuitem')
-        if menuitem_id:
-            cart_item = get_object_or_404(Cart, user=request.user, menuitem__id=menuitem_id)
-            cart_item.delete()
-            return Response(status=status.HTTP_200_OK, data={'message': 'Item removed from cart'})
-        else:
-            Cart.objects.filter(user=request.user).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT, data={'message': 'All items removed from cart'})
+        if not menuitem_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'message': 'No item id provided'})
+        cart_item = Cart.objects.filter(user=request.user, menuitem__id=menuitem_id).first()
+        if not cart_item:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Item not found'})
+        cart_item.delete()
+        queryset = self.get_queryset()
+        total_price = sum(item.price for item in queryset)
+        if queryset.exists():
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({'cart': serializer.data, 'total_price': total_price}, status=status.HTTP_200_OK)
+        return Response({'cart': [], 'total_price': 0}, status=status.HTTP_200_OK)
         
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -135,6 +148,24 @@ class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
 
 
 ## Vistas para la gestion de usuarios ##
+class UserView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    #permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminUser]
+
+    def perform_create(self, serializer):
+        usuario = serializer.save()
+        usuario.set_password(usuario.password)
+        usuario.save()
+
+
+
+
+
+
+
 class ManagerUsersView(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
