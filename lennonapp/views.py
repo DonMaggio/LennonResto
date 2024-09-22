@@ -68,8 +68,8 @@ class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
 class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
     serializer_class = UserCartSerializer
     permission_classes = [IsAuthenticated]
-    #renderer_classes = [TemplateHTMLRenderer]
-    #template_name='cart.html'
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name='cart.html'
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
         cart = Cart.objects.filter(user=self.request.user)
