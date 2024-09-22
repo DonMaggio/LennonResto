@@ -1,5 +1,8 @@
 
 {% extends 'nav.html' %}
+{% csrf_token %}
+
+{% block extra_meta %}<meta name="csrf-token" content="{% csrf_token %}">{% endblock %}
 
 {% block title %}Lennon Resto Carrito {% endblock %}
 
@@ -13,20 +16,32 @@
     <main>
         <section id="cart">
             <h2>Detalles del Pedido</h2>
+
             <ul id="cart-items">
                 {% for item in cart %}
                     <li class=" cart__item">
                         <div class="cart__item-container">
                             <span> {{item.quantity}}x {{item.name}}</span>
-                            <span class="cart__item-container-total">$ {{ item.price }}</span>
+                            <div class="cart__item-container-total"><span>$ {{ item.price }}</span><button class="cart__item-edit" data-item-menuid="{{ item.menuitem }}"><svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#10163299"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg></button></div>
+                            
                         </div>
                     </li>
                 {% endfor %}
             </ul>
+            {% if cart %}
             <div id="total">Total: ${{ total_price }} </div>
-            <button id="confirm-order">Confirmar Pedido</button>
+            <button id="confirm-order" class="confirm-order" data-user-id="{{ user.id }}">CONFIRMAR PEDIDO </button>
+            {% else %}
+            <p class="cart__message">Carrito vacío.</p>
+            {% endif %}
         </section>
     </main>
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Pedido solicitado con éxito.</p>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_scripts %}
