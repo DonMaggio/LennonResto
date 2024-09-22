@@ -1,0 +1,36 @@
+{% extends 'nav.html' %}
+
+{% csrf_token %}
+
+{% block extra_meta %}<meta name="csrf-token" content="{% csrf_token %}">{% endblock %}
+
+{% block title %}Inicio de Sesión - Lennon Resto{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">  <!-- CSS específico para login.html -->
+{% endblock %}
+
+{% block content %}
+<main>
+    <section id="login">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Nombre de Usuario</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" id="login-button">Iniciar Sesión</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/login.js' %}"></script>  <!-- Script específico para login.html -->
+{% endblock %}

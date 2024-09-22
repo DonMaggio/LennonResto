@@ -16,16 +16,19 @@ body{
     
 }
 
-body, div, ul, nav, header, footer, a, li, label,section{
+body, div, ul, nav, header, footer, a, li, label,section, span, button, p{
     margin: 0;
     padding: 0;
 }
 
 main {
-    
     display: flex;
     justify-content: center;
     padding: 2rem;
+}
+
+span{
+    font-size: 16px;
 }
 
 
@@ -33,7 +36,7 @@ main {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: #fcfcfc;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
@@ -53,37 +56,45 @@ h1, h2 {
     justify-content: space-between;
 }
 
+.cart__message{
+    margin: auto;
+
+}
+
 .cart__item-container-total{
     font-weight: 700;
-
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 #cart-items {
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 #cart-items li {
     border-bottom: 1px solid #eee;
-    padding: 1rem 0;
+    padding: 0.9rem 0;
 }
 
-#cart-items li:last-child {
-    border-bottom: none;
+.cart__item-edit{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 40px;
 }
 
 #total {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
     margin: 1rem 0;
     text-align: right;
     padding-right: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #3f6ea1;
+#confirm-order {
+    padding: 10px 10px;
+    background-color: #3f6ea1dd;
     color: white;
     border: none;
     border-radius: 3.5px;
@@ -92,6 +103,50 @@ button {
     margin: auto;;
 }
 
-button:hover {
-    background-color: #3f6ea1dd;
+#confirm-order:hover {
+    background-color: #3f6ea1bb;
+}
+
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 18%; 
+    border-radius: 8px;
+    font-size: 18px;
+    align-items: center;
+}
+
+.modal-content p{
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 0px; /* Distancia desde la parte superior */
+    right: 10px; /* Distancia desde la derecha */
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

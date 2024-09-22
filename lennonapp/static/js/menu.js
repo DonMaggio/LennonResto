@@ -51,6 +51,7 @@ document.querySelectorAll('.modal-btn').forEach(button => {
     button.addEventListener('click', function() {
         const itemId = this.getAttribute('data-item-id');
         const modal = this.closest('.modal');
+        const overlay = modal.closest('.overlay'); // Obtén el overlay
         const quantity = modal.querySelector('.quantity-input').value; // Obtener el valor de la cantidad
 
         const data = {
@@ -90,5 +91,13 @@ document.querySelectorAll('.quantity-input').forEach(input => {
         const cantidad = parseInt(this.value, 10);
         const total = price * cantidad; // Calcular el total
         this.closest('.modal').querySelector('.total-price').textContent = '$' + total.toFixed(2); // Actualizar el total
+    });
+});
+
+// Cierra el modal al hacer clic en el botón
+document.querySelectorAll('.modal-btn').forEach((button, index) => {
+    button.addEventListener('click', () => {
+        document.querySelectorAll('.overlay')[index].style.visibility = 'hidden';
+        document.body.classList.remove('no-scroll'); // Restaurar el scroll
     });
 });
