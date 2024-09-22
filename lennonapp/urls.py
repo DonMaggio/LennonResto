@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview, ManagerUsersView, ManagerSingleUserView, DeliveryUserView, DeliveryUserSingleView, UserView
+from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview
+from .views import ManagerUsersView, ManagerSingleUserView, DeliveryUserView, DeliveryUserSingleView, UserRegisterView, UserView
 from rest_framework.documentation import include_docs_urls
 
 #View Sets
@@ -18,14 +19,15 @@ urlpatterns = [
     #path('secret', views.secret),
 
     #rutas para el menu
-    path('menu', MenuItemView.as_view()),
-    path('menu-items/<int:pk>/', SingleItemView.as_view()),
-    path('cart/menu-items', CustomerCartView.as_view()),
-    path('orders/', OrdersView.as_view()),
-    path('orders/<int:pk>', SingleOrderview.as_view()),
+    path('menu', MenuItemView.as_view(), name='menu'),
+    path('menu-items/<int:pk>/', SingleItemView.as_view(), name='menu-items'),
+    path('cart/menu-items', CustomerCartView.as_view(), name='cart'),
+    path('orders/', OrdersView.as_view(), name='orders'),
+    path('orders/<int:pk>', SingleOrderview.as_view(), name='single-order'),
 
     #gestion de usuarios
-    path('create/user', UserView.as_view()),
+    path('users/', UserView.as_view(), name='users'),
+    path('register/', UserRegisterView.as_view(), name='register'),
     path('groups/manager/users', ManagerUsersView.as_view()),
     path('groups/manager/users/<int:pk>', ManagerSingleUserView.as_view()),
     path('groups/delivery/users', DeliveryUserView.as_view()),
@@ -33,10 +35,10 @@ urlpatterns = [
 
 
     #documentacion
-    path('docs', include_docs_urls(title='Lennon Resto')),
+    path('docs', include_docs_urls(title='Lennon Resto'), name='docs'),
 
     #generacion de token, solo POST
-    path('api-token-auth', obtain_auth_token),
+    path('api-token-auth', obtain_auth_token, name='token'),
 ] 
 
 urlpatterns += router.urls

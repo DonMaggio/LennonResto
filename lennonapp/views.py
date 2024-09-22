@@ -1,13 +1,16 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
 
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+from django.views.generic import CreateView
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 from rest_framework import generics
 from rest_framework import viewsets
@@ -148,22 +151,24 @@ class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
 
 
 ## Vistas para la gestion de usuarios ##
-class UserView(generics.ListCreateAPIView):
+#Lista de todos los usuarios
+class UserView(generics.ListCreateAPIView):#
     queryset = User.objects.all()
     serializer_class = UserSerializer
     #permission_classes = [IsAuthenticated]
     #permission_classes = [IsAuthenticatedOrReadOnly]
-    permission_classes = [IsAdminUser]
+    #permission_classes = [IsAdminUser]
 
-    def perform_create(self, serializer):
-        usuario = serializer.save()
-        usuario.set_password(usuario.password)
-        usuario.save()
-
-
-
-
-
+#Registro de usuarios
+class UserRegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('home')
+    
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
 class ManagerUsersView(generics.ListCreateAPIView):
