@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
     #'rest_framework.renderers.BrowsableAPIRenderer']
 }
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'menu'
 
 #DJOSER = {
 #    'USER_ID_FIELD': 'username',

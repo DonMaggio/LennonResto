@@ -33,7 +33,6 @@ urlpatterns = [
     path('groups/delivery/users', DeliveryUserView.as_view()),
     path('groups/delivery/users/<int:pk>', DeliveryUserSingleView.as_view()),
 
-
     #documentacion
     path('docs', include_docs_urls(title='Lennon Resto'), name='docs'),
 
