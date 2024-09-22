@@ -22,8 +22,10 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('lennonapp.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
+    path('api-authorization/', include('rest_framework.urls')), #autenticacion desde la API
+    path('', include('django.contrib.auth.urls')), #autenticacion manual
+    #path('auth/', include('djoser.urls')),
+    #path('auth/', include('djoser.urls.authtoken')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

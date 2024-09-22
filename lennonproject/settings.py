@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'lennonapp',
     'rest_framework',
     'rest_framework.authtoken',
-    'djoser',
+    #'djoser',
 ]
 
 MIDDLEWARE = [
@@ -142,7 +142,9 @@ REST_FRAMEWORK = {
     #'rest_framework.renderers.BrowsableAPIRenderer']
 }
 
-DJOSER = {
-    'USER_ID_FIELD': 'username',
-    'LOGIN_FIELD': 'email',
-}
+LOGIN_REDIRECT_URL = 'home'
+
+#DJOSER = {
+#    'USER_ID_FIELD': 'username',
+#    'LOGIN_FIELD': 'email',
+#}

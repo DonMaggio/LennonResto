@@ -12,6 +12,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     image = serializers.ImageField(required=True)
     description = serializers.CharField(required=True)
+    price = serializers.DecimalField(decimal_places=0, max_digits=6)
     #category = serializers.StringRelatedField() => me muestra lo definido en __str__ del model Category que es su ForeingKey
     
     class Meta:
@@ -79,7 +80,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'date_joined', 'Date_Joined']
+        fields = ['id', 'username', 'email', 'date_joined', 'Date_Joined', 'password', 'is_staff']
+        extra_kwargs = {'password': {'write_only' : True}} 
 
     def get_Date_Joined(self, obj):
         return obj.date_joined.strftime('%Y-%m-%d')
