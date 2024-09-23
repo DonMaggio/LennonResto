@@ -1,29 +1,3 @@
-
-/*<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const confirmOrderButton = document.getElementById('confirm-order');
-
-    // Confirm order
-    confirmOrderButton.addEventListener('click', () => {
-        alert('Pedido confirmado. ¡Gracias por tu compra!');
-        // Aquí podrías redirigir al usuario a una página de confirmación o realizar una solicitud POST a la API.
-    });
-});
-</script>/
-
-from django.shortcuts import render
-
-def cart_view(request):
-    # Suponiendo que tienes una función que obtiene los datos del carrito
-    cart_items = get_cart_items(request)
-    total = sum(item['quantity'] * item['price'] for item in cart_items)
-    
-    return render(request, 'index.html', {
-        'cart_items': cart_items,
-        'total': total,
-    })
-*/
-
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('value');
 
 document.querySelectorAll('.cart__item-edit').forEach(button => {
@@ -53,7 +27,8 @@ document.querySelectorAll('.cart__item-edit').forEach(button => {
             console.log('Éxito:', data);
             // Aquí puedes actualizar la UI, por ejemplo, eliminar el item de la lista
             const cartItem = button.closest('.cart__item');
-            cartItem.remove(); // Esto elimina el item del carrito
+            //cartItem.remove();// Esto elimina el item del carrito
+            location.reload(); 
         })
         .catch(error => {
             console.error('Error:', error);

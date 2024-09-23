@@ -26,6 +26,13 @@ body, div, ul, nav, header, footer, a, li, label,section{
     padding: 0;
 }
 
+button{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
 header{
     position: fixed;
     top: 0;
@@ -181,15 +188,17 @@ header{
         font-weight: 600;
         line-height: 1;
         
+        
     }
 
     .login{
         margin: 0;
         font-family: sans-serif;
+        color: #414040dd;
     }
     .header__open-nav-button{
         display: none;
-        color: #262626dd;
+        color: #4a4848dd;
     }
 
     .headerlogin{

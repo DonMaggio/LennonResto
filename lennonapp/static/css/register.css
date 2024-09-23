@@ -16,7 +16,7 @@ main {
     padding: 2rem;
 }
 
-#login {
+#register {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@ input {
     align-items: start;
 }
 
-#login-button {
+#register-button {
     padding: 0.5rem;
     margin-top: 10px;
     margin-bottom: 30px;
@@ -70,6 +70,6 @@ input {
     font-family: 'Rajdhani', sans-serif;
 }
 
-#login-button:hover {
+#register-button:hover {
     background-color: #3f6ea1bb;
 }

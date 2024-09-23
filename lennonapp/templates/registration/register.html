@@ -1,4 +1,48 @@
-<!DOCTYPE html>
+{% extends 'nav.html' %}
+
+{% csrf_token %}
+
+{% block extra_meta %}<meta name="csrf-token" content="{% csrf_token %}">{% endblock %}
+
+{% block title %}Registro de Usuario - Lennon Resto{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">  <!-- CSS específico para register.html -->
+{% endblock %}
+
+{% block content %}
+<main>
+    <section id="register">
+        <h2>Crear Cuenta</h2>
+        <form id="register-form" method="POST" action="{% url 'register' %}" class="register-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Nombre de Usuario</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Contraseña</label>
+                {{ form.password2 }}
+            </div>
+            <input type="submit" value="Registrarse" id="register-button">
+            <div class="crear__cuenta">
+                <span>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Iniciar sesión</a></span>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,4 +58,4 @@
     </form>
 </form>
 </body>
-</html>
+</html>-->
