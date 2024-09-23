@@ -36,7 +36,7 @@ function updateTotal(modal, input) {
     const price = parseFloat(modal.querySelector('.modal-btn').getAttribute('data-item-price'));
     const cantidad = parseInt(input.value, 10);
     const total = price * cantidad; // Calcular el total
-    modal.querySelector('.total-price').textContent = '$' + total.toFixed(2); // Actualizar el total
+    modal.querySelector('.total-price').textContent = '$' + total.toFixed(0); // Actualizar el total
 }
 
 document.querySelectorAll('.close-btn').forEach((button, index) => {

@@ -14,11 +14,12 @@
 {% block content %}
 
     <section id="menu" class="category">
-        <h2 class="category__title" id="first_category">ENTRADAS</h2>
+        {% for cate in cat %}
+        <h2 class="category__title" id="first_category">{{cate.title|upper}}</h2>
         <div>
             <ul class="category__card-container">
             {% for item in menu %}
-                {% if item.category.title == 'Entrada' %}
+                {% if item.category.title == cate.title %}
                 <li class="category__card">
                     <img src= "../media/{{ item.image }}" alt="" class="category__card-img">
                     <h4 class="category__card-name">{{ item.title }}</h4>
@@ -48,83 +49,8 @@
             {% endfor %}
             </ul>
         </div>
+        {% endfor %}
     </section>
-    <section class="category">
-        <h2 class="category__title">PRINCIPALES</h2>
-        <div>
-            
-            <ul class="category__card-container">
-            {% for item in menu %}
-                {% if item.category.title == 'Plato Principal' %}
-                <li class="category__card">
-                    <img src='../media/{{item.image}}' alt="" class="category__card-img">
-                    <h4 class="category__card-name">{{ item.title }}</h4>
-                    <p class="category__card-desciption"> $ {{ item.price }}</p>
-                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
-                </li>
-                <div class="overlay" id="overlay">
-                    <div class="modal">
-                        <button class="close-btn"> X </button>
-                        <img src='../media/{{item.image}}' alt="" class="category__card-img">
-                        <h2>{{ item.title }}</h2>
-                        <p>{{ item.description }}</p>
-                        <div class="modal-lastline">
-                            <div class="modal-lastline-quantity">
-                                <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
-                                <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
-                                <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
-                            </div>
-                            
-                            <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
-                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
-            </ul>
-        </div>
-    </section>
-    <section class="category">
-        <h2 class="category__title">POSTRES</h2>
-        
-        <div>
-            <ul class="category__card-container">
-            {% for item in menu %}
-                {% if item.category.title == 'Postre' %}
-                <li class="category__card">
-                    <img src='../media/{{item.image}}' alt="" class="category__card-img">
-                    <h4 class="category__card-name">{{ item.title }}</h4>
-                    <p class="category__card-desciption"> $ {{ item.price }}</p>
-                    
-                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
-                </li>
-                <div class="overlay" id="overlay">
-                    <div class="modal">
-                        <button class="close-btn"> X </button>
-                        <img src='../media/{{item.image}}' alt="" class="category__card-img">
-                        <h2>{{ item.title }}</h2>
-                        <p>{{ item.description }}</p>
-                        <div class="modal-lastline">
-                            <div class="modal-lastline-quantity">
-                                <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
-                                <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
-                                <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
-                            </div>
-                            
-                            <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
-                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
-            </ul>
-        </div>
-    </section>
-
 {% endblock %}
 
 {% block extra_scripts %}
