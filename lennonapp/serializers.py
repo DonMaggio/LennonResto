@@ -31,7 +31,7 @@ class MenuDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'price', 'description', 'image', 'category')
 
 class UserCartSerializer(serializers.ModelSerializer):
-    unit_price = serializers.DecimalField(max_digits=6, decimal_places=2, source='menuitem.price', read_only=True )
+    unit_price = serializers.DecimalField(max_digits=6, decimal_places=0, source='menuitem.price', read_only=True )
     name = serializers.CharField(source='menuitem.title', read_only=True)
 
     class Meta:
@@ -61,8 +61,8 @@ class UserOrdersSerializer(serializers.ModelSerializer):
         return serializer.data
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    unit_price = serializers.DecimalField(max_digits=6, decimal_places=2, source='menuitem.price', read_only=True)
-    price = serializers.DecimalField(max_digits=6, decimal_places=2, read_only=True)
+    unit_price = serializers.DecimalField(max_digits=6, decimal_places=0, source='menuitem.price', read_only=True)
+    price = serializers.DecimalField(max_digits=6, decimal_places=0, read_only=True)
     name = serializers.CharField(source='menuitem.title', read_only=True)
 
     class Meta:

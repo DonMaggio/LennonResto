@@ -11,6 +11,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework import generics
 from rest_framework import viewsets
@@ -18,6 +19,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer, UserSerializer
 from .models import MenuItem, Cart, Order, OrderItem, Category
+from .forms import CustomUserCreationForm
 
 from decimal import Decimal
 
@@ -49,9 +51,12 @@ class MenuItemView(generics.ListCreateAPIView):
         return Response({'menu':self.object, 'cat':categorias})
 
 ## View del detalle de cada item del menu
-class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
+class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuDetailSerializer
+    login_url = "/login/"
+    redirect_field_name = "redirect_to"
+
 
     def get_permissions(self): #sobrescribe los permisos predeterminados de la vista
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
@@ -65,11 +70,13 @@ class SingleItemView(generics.RetrieveUpdateDestroyAPIView):
         return JsonResponse(status=200, data={'message':'Featured status of {} changed to {}'.format(str(menuitem.title) ,str(menuitem.featured))})
 
 ## View para visualizar los items del carrito por usuario
-class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
+class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
     serializer_class = UserCartSerializer
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name='cart.html'
+    login_url = "/login/"
+    redirect_field_name = "redirect_to"
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
         cart = Cart.objects.filter(user=self.request.user)
@@ -82,14 +89,6 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
         price = quantity * item.price
         serializer.save(user=self.request.user, price=price)
 
-    #def delete(self, request, *args, **kwargs):
-    #    menuitem_id = request.data.get('menuitem')
-    #    if menuitem_id:
-    #        cart_item = get_object_or_404(Cart, user=request.user, menuitem__id=menuitem_id)
-    #        cart_item.delete()
-    #        return Response(status=status.HTTP_200_OK, data={'message': 'Item removed from cart'})
-    #    return Response(status=status.HTTP_400_BAD_REQUEST, data={'message':'No item id provided'})
-    
     def delete(self, request, *args, **kwargs):
         menuitem_id = request.data.get('menuitem')
         if not menuitem_id:
@@ -113,9 +112,11 @@ class CustomerCartView(generics.ListCreateAPIView): #funcionalidad de listar (GE
 
 ## View de las ordenes que estan creadas para el staff
 # GET (listar órdenes) y POST (crear órdenes)
-class OrdersView(generics.ListCreateAPIView):
+class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
     serializer_class = UserOrdersSerializer
     permission_classes = [IsAuthenticated]
+    login_url = "/login/"
+    redirect_field_name = "redirect_to"
 
     def perform_create(self, serializer): #sobrescribe la lógica predeterminada de cómo se crea un pedido. Se ejecuta con POST.
         cart_items = Cart.objects.filter(user=self.request.user)
@@ -161,14 +162,14 @@ class UserView(generics.ListCreateAPIView):#
 
 #Registro de usuarios
 class UserRegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('menu')
     
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect(self.success_url)
+        return super().form_valid(form)
 
 
 class ManagerUsersView(generics.ListCreateAPIView):
