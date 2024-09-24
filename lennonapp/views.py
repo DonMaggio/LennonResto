@@ -9,7 +9,8 @@ from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.views.generic import CreateView
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -54,7 +55,7 @@ class MenuItemView(generics.ListCreateAPIView):
 class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuDetailSerializer
-    login_url = "/login/"
+    login_url = "login"
     redirect_field_name = "redirect_to"
 
 
@@ -75,7 +76,7 @@ class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcion
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name='cart.html'
-    login_url = "/login/"
+    login_url = "login"
     redirect_field_name = "redirect_to"
 
     def get_queryset(self): #Filtra los objetos del modelo Cart y devuelve solo aquellos que pertenecen al usuario actual (self.request.user).
@@ -115,7 +116,7 @@ class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcion
 class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
     serializer_class = UserOrdersSerializer
     permission_classes = [IsAuthenticated]
-    login_url = "/login/"
+    login_url = "login"
     redirect_field_name = "redirect_to"
 
     def perform_create(self, serializer): #sobrescribe la lógica predeterminada de cómo se crea un pedido. Se ejecuta con POST.
@@ -141,9 +142,12 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
         return total
 
 ## View de una sola orden
-class SingleOrderview(generics.RetrieveUpdateDestroyAPIView):
+class SingleOrderview(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserOrdersSerializer
     permission_classes = [IsAuthenticated]
+    login_url = "login"
+    redirect_field_name = "redirect_to"
+
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='Manager').exists():
@@ -170,6 +174,15 @@ class UserRegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
+    
+class CustomPasswordChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'registration/password_change.html'
+    success_url = reverse_lazy('password_change_done')
+
+    #def form_valid(self, form):
+    #    # Lógica adicional antes de cambiar la contraseña
+    #    return super().form_valid(form)
 
 
 class ManagerUsersView(generics.ListCreateAPIView):
@@ -239,3 +252,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
             return [IsAdminUser()]
         return [AllowAny()]
+
+"""
+### Envio de mails ###
+def send_email(email):
+
+def index(request):
+    if request.method == 'POST':
+        send_email()
+"""

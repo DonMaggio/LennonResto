@@ -143,6 +143,15 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_REDIRECT_URL = 'menu'
+LOGOUT_REDIRECT_URL = 'menu'
+
+#Envio de mails
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'alan.luis.maggio@gmail.com'
+EMAIL_HOST_PASWORD = 'USER_MAIL_PASSWORD' #VER VARIABLE DE ENTORNO os O decouple
+EMAIL_USE_TLS = True
+
 
 #DJOSER = {
 #    'USER_ID_FIELD': 'username',
