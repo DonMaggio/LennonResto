@@ -95,6 +95,28 @@ input[type="number"] {
     
 }
 
+.add{
+    display: grid;
+    grid-template-rows: 0.95fr;
+    border-radius: 10px;
+    border: 2px, solid, #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+.add a{
+    margin: auto;
+    padding: 0;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.add a h4{
+    margin: 0;
+    padding: 0;
+    color: #101632aa;
+}
+
 .category__card-img{
     object-fit: cover;
     object-position: center;
@@ -165,7 +187,7 @@ input[type="number"] {
 }
 
 /* Botón para abrir la modal */
-.open-modal-btn {
+.open-modal-btn, .edit-modal-btn{
     font-size: 0.7rem;
     padding: 5px 10px;
     background-color: #3f6ea1dd;

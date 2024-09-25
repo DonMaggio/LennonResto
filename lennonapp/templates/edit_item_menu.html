@@ -1,0 +1,60 @@
+{% extends 'nav.html' %}
+
+{% csrf_token %}
+
+{% block extra_meta %}
+<meta name="csrf-token" content="{% csrf_token %}">
+{% endblock %}
+
+{% block title %}Agregar Item al Menú - Lennon Resto{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/add_item_menu.css' %}">  <!-- CSS específico para login.html -->
+{% endblock %}
+
+{% block content %}
+<main>
+    <section id="add-item">
+        <h2>Agregar Item al Menú</h2>
+        <form id="add-item-form" method="PUT" action="{% url 'menu-edit' %}" class="add-item-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="title">Título del Plato:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Precio:</label>
+                <input type="number" id="price" name="price" required step="10">
+            </div>
+
+            <div class="form-group">
+                <label for="image">Imagen:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category_title">Categoría:</label>
+                <select id="category_title" name="category[title]" required>
+                    {% for category in cat %}
+                        <option value="{{ category.title }}">{{ category.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Agregar Item</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'js/editar_menu.js' %}"></script>  <!-- Script específico para main.html -->
+{% endblock %}

@@ -17,21 +17,22 @@ main {
 }
 
 #add-item {
-    margin-top: 50px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     background-color: #fcfcfc;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: 3rem;
     padding-bottom: 10px;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 h2 {
     margin-bottom: 1rem;
     text-align: center;
+    font-size: 1.5rem;
 }
 
 .form-group {
@@ -40,14 +41,21 @@ h2 {
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.1rem;
 }
 
-input {
+input, textarea, select {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.4rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-family: inherit; /* Asegura que se use la misma fuente que el resto */
+    font-size: 1rem; /* Tamaño de fuente consistente */
+}
+
+textarea {
+    resize: vertical; /* Permite que el textarea se redimensione verticalmente */
+    min-height: 100px; /* Establece una altura mínima */
 }
 
 button {

@@ -10,14 +10,14 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/editar_menu.css' %}">  <!-- CSS específico para login.html -->
+<link rel="stylesheet" href="{% static 'css/add_item_menu.css' %}">  <!-- CSS específico para login.html -->
 {% endblock %}
 
 {% block content %}
 <main>
     <section id="add-item">
         <h2>Agregar Item al Menú</h2>
-        <form id="add-item-form" method="POST" action="{% url 'menu' %}" class="add-item-form" enctype="multipart/form-data">
+        <form id="add-item-form" method="POST" action="{% url 'menu-edit' %}" class="add-item-form" enctype="multipart/form-data">
             {% csrf_token %}
             
             <div class="form-group">
@@ -27,7 +27,7 @@
 
             <div class="form-group">
                 <label for="price">Precio:</label>
-                <input type="number" id="price" name="price" required step="0.01">
+                <input type="number" id="price" name="price" required step="10">
             </div>
 
             <div class="form-group">
