@@ -7,15 +7,12 @@
 </head>
 <body>
     <ul>
-        {% for item in cart %}
+        {% for item in cat %}
         <li>
-            <h2>{{ item.name }}</h2>
-            <p>{{ item.quantity }}</p>
-            <p>{{ item.unit_price }}</p>
-            <p>{{ item.price }}</p>
+            <h2>{{ item }}</h2>
         </li>
         {% endfor %}
     </ul>
-    <h3>Precio Total del Carrito: ${{ total_price }}</h3>
+    
 </body>
 </html>
