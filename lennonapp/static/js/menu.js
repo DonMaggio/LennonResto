@@ -101,3 +101,4 @@ document.querySelectorAll('.modal-btn').forEach((button, index) => {
         document.body.classList.remove('no-scroll'); // Restaurar el scroll
     });
 });
+

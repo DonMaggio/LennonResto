@@ -26,7 +26,7 @@
                     <p class="category__card-desciption"> ${{ item.price }}</p>
                     <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
                 </li>
-                <div class="overlay" id="overlay">
+                <li class="overlay" id="overlay">
                     <div class="modal">
                         <button class="close-btn"> X </button>
                         <img src='../media/{{item.image}}' alt="" class="category__card-img">
@@ -44,7 +44,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </li>
                 {% endif %}
             {% endfor %}
             </ul>

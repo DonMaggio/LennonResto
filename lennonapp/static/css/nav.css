@@ -131,6 +131,12 @@ header{
     font-size: 1rem;
     margin: auto;
     cursor: pointer;
+    
+}
+
+.saludo-span {
+    display: flex;
+    align-items: center; /* Centra verticalmente el texto y el SVG */
 }
 
 .header__nav-item a{
