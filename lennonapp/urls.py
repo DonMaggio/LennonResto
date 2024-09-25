@@ -21,8 +21,8 @@ urlpatterns = [
 
     #rutas para el menu
     path('menu', MenuItemView.as_view(), name='menu'),
+    path('menu-items/add', CreateMenuItemView.as_view(), name='add-item-menu'),
     path('menu-items/<int:pk>/', SingleItemView.as_view(), name='menu-items'),
-    path('menu/edit', CreateMenuItemView.as_view(), name='menu-edit'),
     path('cart/menu-items', CustomerCartView.as_view(), name='cart'),
     path('orders/', OrdersView.as_view(), name='orders'),
     path('orders/<int:pk>', SingleOrderview.as_view(), name='single-order'),

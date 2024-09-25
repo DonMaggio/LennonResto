@@ -39,7 +39,7 @@ def secret(request):
     return Response({'message':'Mensaje secreto'})
 
 ## View del menu completo
-class MenuItemView(generics.ListCreateAPIView):
+class MenuItemView(generics.ListAPIView):
     format = None
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
@@ -56,15 +56,18 @@ class MenuItemView(generics.ListCreateAPIView):
         categorias = Category.objects.all()
         return Response({'menu':self.object, 'cat':categorias})
     
-class CreateMenuItemView(LoginRequiredMixin, generics.ListAPIView):
+#View para crear items
+class CreateMenuItemView(LoginRequiredMixin, generics.ListCreateAPIView):
     serializer_class = MenuDetailSerializer
     queryset = MenuItem.objects.all()
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'editar_menu.html'
+    template_name = 'add_item_menu.html'
     success_url = reverse_lazy('menu')
+    login_url = "login"
+    redirect_field_name = "redirect_to"
 
     def get_permissions(self):
-        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH','GET']:
+        if self.request.method in [ 'GET', 'PUT', 'PATCH', 'DELETE', 'POST']:
             return [IsAdminUser()]
         return [AllowAny()]
 
@@ -72,24 +75,44 @@ class CreateMenuItemView(LoginRequiredMixin, generics.ListAPIView):
         categorias = Category.objects.all()
         return Response({'cat':categorias})
     
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect(self.success_url)
+        return Response({'errors': serializer.errors, 'cat': Category.objects.all()})
+    
 
-## View del detalle de cada item del menu
+## View del detalle de cada item para modificar
 class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuDetailSerializer
+    template_name = 'edit_item_menu.html'
+    renderer_classes = [TemplateHTMLRenderer]
+    success_url = reverse_lazy('menu')
     login_url = "login"
     redirect_field_name = "redirect_to"
 
-    def get_permissions(self): #sobrescribe los permisos predeterminados de la vista
-        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
-            return [IsAdminUser()] ## Solo permite estas acciones a los administradores
-        return [AllowAny()] ## Permite a cualquier usuario acceder a los demás métodos (como GET)
+    def get_permissions(self):
+        if self.request.method in [ 'GET', 'PUT', 'PATCH', 'DELETE', 'POST']:
+            return [IsAdminUser()]
+        return [AllowAny()]
     
     def patch(self, request, *args, **kwargs):
-        menuitem = MenuItem.objects.get(pk=self.kwargs['pk'])
-        menuitem.featured = not menuitem.featured
-        menuitem.save()
-        return JsonResponse(status=200, data={'message':'Featured status of {} changed to {}'.format(str(menuitem.title) ,str(menuitem.featured))})
+        menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
+        serializer = self.get_serializer(menuitem, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect(self.success_url)
+        return JsonResponse(serializer.errors, status=400)
+    
+    def put(self, request, *args, **kwargs):
+        menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
+        serializer = self.get_serializer(menuitem, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect(self.success_url)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 ## View para visualizar los items del carrito por usuario
 class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
