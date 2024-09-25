@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 
+from django.template.loader import get_template
+
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
@@ -50,6 +55,23 @@ class MenuItemView(generics.ListCreateAPIView):
         self.object = self.queryset.all()
         categorias = Category.objects.all()
         return Response({'menu':self.object, 'cat':categorias})
+    
+class CreateMenuItemView(LoginRequiredMixin, generics.ListAPIView):
+    serializer_class = MenuDetailSerializer
+    queryset = MenuItem.objects.all()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'editar_menu.html'
+    success_url = reverse_lazy('menu')
+
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH','GET']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+
+    def get(self, request, *args, **kwargs):
+        categorias = Category.objects.all()
+        return Response({'cat':categorias})
+    
 
 ## View del detalle de cada item del menu
 class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -57,7 +79,6 @@ class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MenuDetailSerializer
     login_url = "login"
     redirect_field_name = "redirect_to"
-
 
     def get_permissions(self): #sobrescribe los permisos predeterminados de la vista
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
@@ -129,6 +150,9 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
                                     unit_price=cart_item.unit_price, price=cart_item.price, order=order)
             cart_item.delete()
 
+        # Enviar correo de confirmación al usuario
+        self.send_order_confirmation_email(order)
+
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='Manager').exists():
@@ -140,6 +164,26 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
         for item in cart_items:
             total += item.price
         return total
+    
+    def send_order_confirmation_email(self, order):
+        subject = 'Confirmación de pedido Lennon'
+        message = f'Hola {self.request.user.username},\n\nTu pedido con ID {order.id} ha sido confirmado.'
+        recipient_email = self.request.user.email
+        from_email = settings.DEFAULT_FROM_EMAIL
+
+        template = get_template('email/email_order_success.html')
+        content = template.render({'order': order})
+        
+        #Correo (titulo, cuerpo, emisor, destinatario)
+        msg = EmailMultiAlternatives(
+            'Confirmación de pedido Lennon',
+            f'Hola {self.request.user.username},\n\nTu pedido con ID {order.id} ha sido confirmado.',
+            from_email,
+            [recipient_email],
+        )
+
+        msg.attach_alternative(content, 'text/html')
+        msg.send()
 
 ## View de una sola orden
 class SingleOrderview(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -178,7 +222,7 @@ class UserRegisterView(CreateView):
 class CustomPasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     template_name = 'registration/password_change.html'
-    success_url = reverse_lazy('password_change_done')
+    success_url = reverse_lazy('menu')
 
     #def form_valid(self, form):
     #    # Lógica adicional antes de cambiar la contraseña
@@ -252,12 +296,3 @@ class ProductViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
             return [IsAdminUser()]
         return [AllowAny()]
-
-"""
-### Envio de mails ###
-def send_email(email):
-
-def index(request):
-    if request.method == 'POST':
-        send_email()
-"""
