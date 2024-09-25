@@ -28,7 +28,7 @@
                     <li class="header__nav-item"><a href="#profile">Nosotros</a></li>
                     <li class="header__nav-item"><a href="{% url 'menu' %}">Menu</a></li>
                     {% if user.is_staff %}
-                    <li class="header__nav-item"><a href="{% url 'menu-edit' %}">Editar Menu</a></li>
+                    <li class="header__nav-item"><a href="{% url 'add-item-menu' %}">Editar Menu</a></li>
                     {% endif %}
                 {% if user.username %}
                     <li class="header__nav-item headerlogin"><a href="#">Mi Perfil</a></li>

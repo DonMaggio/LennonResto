@@ -17,7 +17,7 @@
 <main>
     <section id="add-item">
         <h2>Agregar Item al Menú</h2>
-        <form id="add-item-form" method="POST" action="{% url 'menu-edit' %}" class="add-item-form" enctype="multipart/form-data">
+        <form id="add-item-form" method="POST" >
             {% csrf_token %}
             
             <div class="form-group">
@@ -42,13 +42,12 @@
 
             <div class="form-group">
                 <label for="category_title">Categoría:</label>
-                <select id="category_title" name="category[title]" required>
+                <select id="category_title" name="category_title" required>
                     {% for category in cat %}
-                        <option value="{{ category.title }}">{{ category.title }}</option>
+                        <option value="{{ category.title }}">{{ category.id }}</option>
                     {% endfor %}
                 </select>
             </div>
-
             <button type="submit">Agregar Item</button>
         </form>
     </section>
