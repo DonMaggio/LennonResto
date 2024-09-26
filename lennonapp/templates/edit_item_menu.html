@@ -16,45 +16,45 @@
 {% block content %}
 <main>
     <section id="add-item">
-        <h2>Agregar Item al Menú</h2>
-        <form id="add-item-form" method="PUT" action="{% url 'menu-edit' %}" class="add-item-form" enctype="multipart/form-data">
+        <h2>Modificar Item del Menú</h2>
+        <form id="edit-item-form" method="PUT" class="edit-item-form">
             {% csrf_token %}
             
             <div class="form-group">
                 <label for="title">Título del Plato:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" value="{{ title }}">
             </div>
 
             <div class="form-group">
                 <label for="price">Precio:</label>
-                <input type="number" id="price" name="price" required step="10">
+                <input type="number" id="price" name="price" value="{{ price }}" step="10">
             </div>
 
             <div class="form-group">
                 <label for="image">Imagen:</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
+                <input type="file" id="image" name="image" accept="image/*">
+                <input type="hidden" id="existing-image" name="existing-image" value="{{ image }}">
             </div>
 
             <div class="form-group">
                 <label for="description">Descripción:</label>
-                <textarea id="description" name="description" required></textarea>
+                <textarea id="description" name="description">{{ description }}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="category_title">Categoría:</label>
-                <select id="category_title" name="category[title]" required>
-                    {% for category in cat %}
-                        <option value="{{ category.title }}">{{ category.title }}</option>
-                    {% endfor %}
+                <select id="category" name="category" value="{{ category.title }}" required>
+                    <option value="1" {% if category == 1 %}selected{% endif %}>Entrada</option>
+                    <option value="2" {% if category == 2 %}selected{% endif %}>Plato Principal</option>
+                    <option value="3" {% if category == 3 %}selected{% endif %}>Postre</option>
                 </select>
             </div>
-
-            <button type="submit">Agregar Item</button>
+            <button type="submit">Modificar Item</button>
         </form>
     </section>
 </main>
 {% endblock %}
 
 {% block extra_scripts %}
-    <script src="{% static 'js/editar_menu.js' %}"></script>  <!-- Script específico para main.html -->
+    <script src="{% static 'js/edit_menu.js' %}"></script>  <!-- Script específico para main.html -->
 {% endblock %}

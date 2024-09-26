@@ -102,3 +102,8 @@ document.querySelectorAll('.modal-btn').forEach((button, index) => {
     });
 });
 
+function redirectToItem(itemId) {
+    console.log("Redirecting to item:", itemId); 
+    window.location.href = 'http://127.0.0.1:8000/menu-items/'+itemId ; // Asumiendo que la URL espera un ID
+}
+
