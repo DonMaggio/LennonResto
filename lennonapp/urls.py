@@ -21,12 +21,14 @@ urlpatterns = [
 
     #rutas para el menu
     path('menu', MenuItemView.as_view(), name='menu'),
-    path('menu-items/add', CreateMenuItemView.as_view(), name='add-item-menu'),
-    path('menu-items/<int:pk>/', SingleItemView.as_view(), name='menu-items'),
     path('cart/menu-items', CustomerCartView.as_view(), name='cart'),
     path('orders/', OrdersView.as_view(), name='orders'),
     path('orders/<int:pk>', SingleOrderview.as_view(), name='single-order'),
 
+    #Gestion de la carta
+    path('menu-items/add', CreateMenuItemView.as_view(), name='add-item-menu'),
+    path('menu-items/<int:pk>/', SingleItemView.as_view(), name='menu-edit'),
+    
     #gestion de usuarios
     path('users/', UserView.as_view(), name='users'),
     path('register/', UserRegisterView.as_view(), name='register'),

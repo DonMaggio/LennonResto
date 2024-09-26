@@ -80,15 +80,15 @@ class CreateMenuItemView(LoginRequiredMixin, generics.ListCreateAPIView):
         if serializer.is_valid():
             serializer.save()
             return redirect(self.success_url)
-        return Response({'errors': serializer.errors, 'cat': Category.objects.all()})
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 
 ## View del detalle de cada item para modificar
 class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = MenuItem.objects.all()
     serializer_class = MenuDetailSerializer
-    template_name = 'edit_item_menu.html'
-    renderer_classes = [TemplateHTMLRenderer]
+    #template_name = 'edit_item_menu.html'
+    #renderer_classes = [TemplateHTMLRenderer]
     success_url = reverse_lazy('menu')
     login_url = "login"
     redirect_field_name = "redirect_to"
@@ -98,21 +98,29 @@ class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
             return [IsAdminUser()]
         return [AllowAny()]
     
-    def patch(self, request, *args, **kwargs):
-        menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
-        serializer = self.get_serializer(menuitem, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return redirect(self.success_url)
-        return JsonResponse(serializer.errors, status=400)
-    
     def put(self, request, *args, **kwargs):
-        menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
-        serializer = self.get_serializer(menuitem, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return redirect(self.success_url)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        response = super().put(request, *args, **kwargs)
+        return redirect(self.success_url)
+
+    def patch(self, request, *args, **kwargs):
+        response = super().patch(request, *args, **kwargs)
+        return redirect(self.success_url)
+    
+    #def patch(self, request, *args, **kwargs):
+    #    menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
+    #    serializer = self.get_serializer(menuitem, data=request.data, partial=True)
+    #    if serializer.is_valid():
+    #        serializer.save()
+    #        return redirect(self.success_url)
+    #    return JsonResponse(serializer.errors, status=400)
+    
+    #def put(self, request, *args, **kwargs):
+    #    menuitem = get_object_or_404(MenuItem, pk=self.kwargs['pk'])
+    #    serializer = self.get_serializer(menuitem, data=request.data)
+    #    if serializer.is_valid():
+    #        serializer.save()
+    #        return redirect(self.success_url)
+    #    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 ## View para visualizar los items del carrito por usuario
 class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcionalidad de listar (GET) y crear (POST)
@@ -169,8 +177,12 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
         order = serializer.save(user=self.request.user, total=total) #Creación de nuevo objeto Order
 
         for cart_item in cart_items: #Creación de los item en OrderItem por cada item del carrito del usuario
-            OrderItem.objects.create(menuitem=cart_item.menuitem, quantity=cart_item.quantity,
-                                    unit_price=cart_item.unit_price, price=cart_item.price, order=order)
+            OrderItem.objects.create(
+                menuitem=cart_item.menuitem, 
+                quantity=cart_item.quantity,
+                unit_price=cart_item.menuitem.price, 
+                price=cart_item.price, 
+                order=order)
             cart_item.delete()
 
         # Enviar correo de confirmación al usuario
@@ -190,16 +202,21 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
     
     def send_order_confirmation_email(self, order):
         subject = 'Confirmación de pedido Lennon'
-        message = f'Hola {self.request.user.username},\n\nTu pedido con ID {order.id} ha sido confirmado.'
-        recipient_email = self.request.user.email
         from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_email = self.request.user.email
+        if not recipient_email:
+            print("No se puede enviar el correo. El usuario no tiene una dirección de correo electrónico válida.")
+            return
 
         template = get_template('email/email_order_success.html')
-        content = template.render({'order': order})
+        content = template.render({
+            'order': order, 
+            'user': self.request.user,
+            'order_items': order.orderitem_set.all()})
         
         #Correo (titulo, cuerpo, emisor, destinatario)
         msg = EmailMultiAlternatives(
-            'Confirmación de pedido Lennon',
+            subject,
             f'Hola {self.request.user.username},\n\nTu pedido con ID {order.id} ha sido confirmado.',
             from_email,
             [recipient_email],

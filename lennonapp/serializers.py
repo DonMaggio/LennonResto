@@ -25,6 +25,8 @@ class MenuDetailSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=True)
     #category = serializers.StringRelatedField()
     #category = CategorySerializer(read_only=False)
+    #category = CategorySerializer()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
     
     class Meta:
         model = MenuItem
