@@ -8,9 +8,7 @@ document.getElementById("add-item-form").addEventListener("submit", function(eve
         price: document.getElementById("price").value || null,
         image: document.getElementById("image").files[0] || null,
         description: document.getElementById("description").value,
-        category: {
-            title: document.getElementById("category_title").value
-        }
+        category: document.getElementById("category").value
     };
     // Si estás subiendo una imagen, usa FormData
     const data = new FormData();
@@ -18,7 +16,7 @@ document.getElementById("add-item-form").addEventListener("submit", function(eve
     data.append('price', formData.price);
     data.append('image', formData.image); // Asegúrate de que sea un archivo
     data.append('description', formData.description);
-    data.append('category[title]', formData.category.title);
+    data.append('category', formData.category);
 
     fetch('', {
         method: 'POST',
@@ -28,12 +26,13 @@ document.getElementById("add-item-form").addEventListener("submit", function(eve
         body: data
     })
     .then(response => {
-        if (!response.ok) {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirige a la URL proporcionada por el backend
+        } else {
             return response.json().then(err => {
                 throw new Error(err.message || 'Error en la solicitud');
             });
         }
-        return response;
     })
     .then(data => {
         console.log('Success:', data);
@@ -43,3 +42,5 @@ document.getElementById("add-item-form").addEventListener("submit", function(eve
         console.error('Error:', error);
     });
 });
+
+

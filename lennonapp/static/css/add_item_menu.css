@@ -13,7 +13,7 @@ body {
 main {
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 #add-item {
@@ -24,7 +24,8 @@ main {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 3rem;
-    padding-bottom: 10px;
+    padding-top: 20px;
+    padding-bottom: 8px;
     width: 100%;
     max-width: 500px;
 }
