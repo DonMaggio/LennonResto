@@ -1,0 +1,53 @@
+{% extends 'nav.html' %}
+{% csrf_token %}
+
+{% block extra_meta %}<meta name="csrf-token" content="{% csrf_token %}">{% endblock %}
+
+{% block title %}Pedidos del Restaurante - Lennon Resto{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/orders.css' %}">  <!-- CSS específico para pedidos.html -->
+{% endblock %}
+
+{% block content %}
+<section id="pedidos" class="category">
+    <h2 class="category__title">PEDIDOS</h2>
+    
+    <!--<div class="tabs">
+        <button class="tab-button active" onclick="showTab('pendientes')">Pendientes</button>
+        <button class="tab-button" onclick="showTab('realizados')">Realizados</button>
+    </div>-->
+    
+    <div id="pendientes" class="tab-content active">
+        <h3>Pedidos Pendientes</h3>
+        <ul class="pedido-list">
+            {% for pedido in orders %}
+            <li class="pedido-item">
+                <div class="pedido-item-cabecera">
+                    <span>Pedido N°: {{ pedido.id }}</span>
+                    <span>U:{{ pedido.user }}</span>
+                    <span>{{ pedido.Date }}</span>
+                    <span>Tot   : ${{ pedido.total }}</span>
+                </div>
+                <div>
+                    <ul class="pedido-item-detalle">
+                        {% for order in pedido.order_items %}
+                        <li>
+                            <span>{{ order.quantity }}</span>
+                            <span>{{ order.name }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <button class="btn-ver-detalles">Completado</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/orders.js' %}"></script>  <!-- Script específico para pedidos.html -->
+{% endblock %}
