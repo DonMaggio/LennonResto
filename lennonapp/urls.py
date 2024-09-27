@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview
-from .views import ManagerUsersView, ManagerSingleUserView, DeliveryUserView, DeliveryUserSingleView, UserRegisterView, UserView
+from .views import UserRegisterView
 from .views import CustomPasswordChangeView, CreateMenuItemView
 from rest_framework.documentation import include_docs_urls
 
@@ -30,13 +30,13 @@ urlpatterns = [
     path('menu-items/<int:pk>/', SingleItemView.as_view(), name='menu-edit'),
     
     #gestion de usuarios
-    path('users/', UserView.as_view(), name='users'),
+    #path('users/', UserView.as_view(), name='users'),
     path('register/', UserRegisterView.as_view(), name='register'),
     path('accounts/password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
-    path('groups/manager/users', ManagerUsersView.as_view()),
-    path('groups/manager/users/<int:pk>', ManagerSingleUserView.as_view()),
-    path('groups/delivery/users', DeliveryUserView.as_view()),
-    path('groups/delivery/users/<int:pk>', DeliveryUserSingleView.as_view()),
+    #path('groups/manager/users', ManagerUsersView.as_view()),
+    #path('groups/manager/users/<int:pk>', ManagerSingleUserView.as_view()),
+    #path('groups/delivery/users', DeliveryUserView.as_view()),
+    #path('groups/delivery/users/<int:pk>', DeliveryUserSingleView.as_view()),
 
     #documentacion
     path('docs', include_docs_urls(title='Lennon Resto'), name='docs'),
