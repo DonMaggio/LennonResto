@@ -23,7 +23,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 
-from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer, UserSerializer
+from .serializers import MenuItemSerializer, MenuDetailSerializer, UserCartSerializer, UserOrdersSerializer, UserSerializer, OrdersSerializer
 from .models import MenuItem, Cart, Order, OrderItem, Category
 from .forms import CustomUserCreationForm
 
@@ -216,23 +216,69 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
         msg.attach_alternative(content, 'text/html')
         msg.send()
 
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({'orders':serializer.data})
-
 ## View de una sola orden
-class SingleOrderview(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
+class ChangeOrderview(LoginRequiredMixin, generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     login_url = "menu"
     redirect_field_name = "redirect_to"
-    serializer_class = UserOrdersSerializer
-
+    serializer_class = OrdersSerializer
+    success_url = reverse_lazy('pending-orders')
+    
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='Manager').exists():
             return Order.objects.all()
         return Order.objects.filter(user=user)
+    
+    def put(self, request, *args, **kwargs):
+        response = super().put(request, *args, **kwargs)
+        return redirect(self.success_url)
+
+    def patch(self, request, *args, **kwargs):
+        response = super().patch(request, *args, **kwargs)
+        return redirect(self.success_url)
+
+
+## View de ordenes prendientes
+class PendingOrdersView(LoginRequiredMixin, generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    login_url = "menu"
+    redirect_field_name = "redirect_to"
+    serializer_class = OrdersSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name='pending_orders.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name='Manager').exists():
+            return Order.objects.filter(status=False)
+        return Order.objects.filter(user=user, status=False)
+    
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'orders':serializer.data})
+
+## View de ordenes completadas 
+class CompletedOrdersView(LoginRequiredMixin, generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    login_url = "menu"
+    redirect_field_name = "redirect_to"
+    serializer_class = OrdersSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name='completed_orders.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name='Manager').exists():
+            return Order.objects.filter(status=True)
+        return Order.objects.filter(user=user, status=True)
+    
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'orders':serializer.data})
+
 
 """
 ## Vistas para la gestion de usuarios ##

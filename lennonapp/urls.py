@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, SingleOrderview
-from .views import UserRegisterView
+from .views import MenuItemView, SingleItemView, CustomerCartView, OrdersView, ChangeOrderview
+from .views import UserRegisterView, PendingOrdersView, CompletedOrdersView
 from .views import CustomPasswordChangeView, CreateMenuItemView
 from rest_framework.documentation import include_docs_urls
 
@@ -23,7 +23,9 @@ urlpatterns = [
     path('menu', MenuItemView.as_view(), name='menu'),
     path('cart/menu-items', CustomerCartView.as_view(), name='cart'),
     path('orders/', OrdersView.as_view(), name='orders'),
-    path('orders/<int:pk>', SingleOrderview.as_view(), name='single-order'),
+    path('orders/change/<int:pk>', ChangeOrderview.as_view(), name='change-status'),
+    path('orders/pending', PendingOrdersView.as_view(), name='pending-orders'),
+    path('orders/completed', CompletedOrdersView.as_view(), name='completed-orders'),
 
     #Gestion de la carta
     path('menu-items/add', CreateMenuItemView.as_view(), name='add-item-menu'),

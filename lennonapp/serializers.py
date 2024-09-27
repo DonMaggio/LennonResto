@@ -74,6 +74,28 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'menuitem': {'read_only': True}
         }
 
+class OrdersSerializer(serializers.ModelSerializer):
+    Date = serializers.SerializerMethodField()
+    date = serializers.DateTimeField(write_only=True, default=datetime.now)
+    order_items = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'delivery_crew', 'status', 'total', 'date', 'Date', 'order_items']
+        extra_kwargs = {
+            'total': {'read_only': True}
+        }
+
+    def get_Date(self, obj):
+        return obj.date.strftime('%Y-%m-%d')
+    
+    def get_order_items(self, obj):
+        order_items = OrderItem.objects.filter(order=obj)
+        serializer = OrderItemSerializer(order_items, many=True, context={'request': self.context['request']})
+        return serializer.data
+
+    def get_user(self, obj):
+        return obj.user.get_full_name() if obj.user.get_full_name() else obj.user.username
 
 class UserSerializer(serializers.ModelSerializer):
     Date_Joined = serializers.SerializerMethodField()
