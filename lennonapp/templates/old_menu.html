@@ -30,10 +30,7 @@
         <h2 class="category__title">Entrada</h2>
         <div>
             <ul class="category__card-container">
-                {% for item in cat %}
-                {{ item }}
-                {% endfor %}
-            {% for item in menu %}
+            {% for item in products %}
                 {% if item.category.title == 'Entrada' %}
                 <li class="category__card">
                     <img src= "../media/{{ item.image }}" alt="" class="category__card-img">

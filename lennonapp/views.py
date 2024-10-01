@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.urls import reverse_lazy
 
 from django.template.loader import get_template
@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer
 
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
-from django.views.generic import CreateView
+from django.views.generic import CreateView, View
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
@@ -28,6 +28,8 @@ from .models import MenuItem, Cart, Order, OrderItem, Category
 from .forms import CustomUserCreationForm
 
 from decimal import Decimal
+
+from .utils import rendertopdf
 
 ## View generica
 def home(request):
@@ -56,7 +58,10 @@ class MenuItemView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         self.object = self.queryset.all()
         categorias = Category.objects.all()
-        return Response({'menu':self.object, 'cat':categorias})
+        cart_items_count = 0
+        if request.user.is_authenticated:
+            cart_items_count = Cart.objects.filter(user=request.user).count()
+        return Response({'menu':self.object, 'cat':categorias, 'cart_items_count': cart_items_count})
     
 #View para crear items
 class CreateMenuItemView(LoginRequiredMixin, generics.ListCreateAPIView):
@@ -84,7 +89,6 @@ class CreateMenuItemView(LoginRequiredMixin, generics.ListCreateAPIView):
             serializer.save()
             return redirect(self.success_url)
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
 
 ## View del detalle de cada item para modificar
 class SingleItemView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -153,14 +157,14 @@ class CustomerCartView(LoginRequiredMixin, generics.ListCreateAPIView): #funcion
         return Response({'cart':serializer.data, 'total_price':total_price})
 
 ## View de las ordenes que estan creadas
-# GET (listar órdenes) y POST (crear órdenes)
-class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
+# POST (crear órdenes)
+class OrdersView(LoginRequiredMixin, generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     login_url = "menu"
     redirect_field_name = "redirect_to"
     serializer_class = UserOrdersSerializer
     renderer_classes = [TemplateHTMLRenderer]
-    template_name='orders.html'
+    template_name='old_orders.html'
 
     def perform_create(self, serializer): #sobrescribe la lógica predeterminada de cómo se crea un pedido. Se ejecuta con POST.
         cart_items = Cart.objects.filter(user=self.request.user)
@@ -216,7 +220,27 @@ class OrdersView(LoginRequiredMixin, generics.ListCreateAPIView):
         msg.attach_alternative(content, 'text/html')
         msg.send()
 
-## View de una sola orden
+#View para listar todas las ordenes por usuario
+class OrderListView(LoginRequiredMixin, generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    login_url = "menu"
+    redirect_field_name = "redirect_to"
+    serializer_class = UserOrdersSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name='orders_list.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name='Manager').exists():
+            return Order.objects.all()
+        return Order.objects.filter(user=user)
+    
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'orders':serializer.data})
+
+## View de una sola orden para cambio de status
 class ChangeOrderview(LoginRequiredMixin, generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     login_url = "menu"
@@ -238,7 +262,6 @@ class ChangeOrderview(LoginRequiredMixin, generics.UpdateAPIView):
         response = super().patch(request, *args, **kwargs)
         return redirect(self.success_url)
 
-
 ## View de ordenes prendientes
 class PendingOrdersView(LoginRequiredMixin, generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -251,8 +274,8 @@ class PendingOrdersView(LoginRequiredMixin, generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='Manager').exists():
-            return Order.objects.filter(status=False)
-        return Order.objects.filter(user=user, status=False)
+            return Order.objects.filter(status=False).order_by('-id')
+        return Order.objects.filter(user=user, status=False).order_by('-id')
     
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -271,8 +294,8 @@ class CompletedOrdersView(LoginRequiredMixin, generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.groups.filter(name='Manager').exists():
-            return Order.objects.filter(status=True)
-        return Order.objects.filter(user=user, status=True)
+            return Order.objects.filter(status=True).order_by('-id')
+        return Order.objects.filter(user=user, status=True).order_by('-id')
     
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -311,6 +334,40 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'registration/password_change.html'
     success_url = reverse_lazy('menu')
 
+
+## Utilizacion de viewsets ##
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrdersSerializer
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name='old_orders.html'
+    
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
+            return [IsAdminUser()]
+        return [AllowAny()]
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'orders':serializer.data})
+    
+#Impresion de Order
+class PrintOrder(generics.ListAPIView):
+    serializer_class = OrdersSerializer
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        order_id = self.kwargs.get('pk') 
+        return Order.objects.filter(id=order_id)
+    
+    def get(self, request, *args, **kwargs):
+        orders = self.get_queryset()
+        serializer = self.get_serializer(orders, many=True)
+        data = {'orders':serializer.data}
+        pdf = rendertopdf('ticket/order_tickets.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+    
 
 """
 class ManagerUsersView(generics.ListCreateAPIView):
@@ -364,19 +421,3 @@ class DeliveryUserSingleView(generics.RetrieveDestroyAPIView):
         queryset = User.objects.filter(groups=delivery_group)
         return queryset
 """
-
-## Utilizacion de viewsets ##
-class ProductViewSet(viewsets.ModelViewSet):
-    serializer_class = MenuDetailSerializer
-    model = MenuItem
-
-    def get_object(self):
-        return get_object_or_404(self.model, id=self.kwargs.get('pk'))
-    
-    def get_queryset(self, pk=None):
-        return self.model.objects.all()
-    
-    def get_permissions(self):
-        if self.request.method in ['POST', 'PUT', 'DELETE', 'PATCH']:
-            return [IsAdminUser()]
-        return [AllowAny()]
