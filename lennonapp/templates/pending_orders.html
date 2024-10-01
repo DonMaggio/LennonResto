@@ -20,7 +20,7 @@
     </div>-->
     
     <div id="pendientes" class="tab-content active">
-        <h3>Pedidos Pendientes</h3>
+        <div class="tab-content-title"><h3>Pedidos Pendientes:</h3><button class="btn" onclick=window.location.href="{% url 'completed-orders' %}">Ir a pedidos Cumplidos</button></div>
         <ul class="pedido-list">
             {% for pedido in orders %}
             <li class="pedido-item">
@@ -40,7 +40,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <button class="btn-ver-detalles">Completado</button>
+                <button class="btn btn-ver-detalles" data-id="{{ pedido.id }}" data-status="{{ pedido.status }}">Completado</button>
             </li>
             {% endfor %}
         </ul>
@@ -49,5 +49,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/orders.js' %}"></script>  <!-- Script específico para pedidos.html -->
+<script src="{% static 'js/orders.js' %}"></script>
 {% endblock %}

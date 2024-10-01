@@ -127,6 +127,11 @@ header{
     
 }
 
+.headerlogin{
+    font-size: 24px;
+    color:#262626;
+}
+
 .saludo{
     font-size: 1rem;
     margin: auto;

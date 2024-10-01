@@ -10,6 +10,12 @@
     margin: 0;
     width: 80%;
 }
+.tab-content-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .category__title {
     font-size: 2.3rem;
@@ -53,12 +59,27 @@
 
 }
 
-.btn-ver-detalles {
-    background-color: #3f6ea1dd;
+.btn{
     color: white;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
+    background-color: #ff2a2aee;
+    font-weight: 600;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem
+    
+}
+
+.btn:hover {
+    background-color: #ff2a2abb;
+    ;
+}
+
+
+
+.btn-ver-detalles {
+    background-color: #3f6ea1dd;
 }
 
 .btn-ver-detalles:hover {

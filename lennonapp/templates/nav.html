@@ -28,10 +28,17 @@
                     <li class="header__nav-item"><a href="#profile">Nosotros</a></li>
                     <li class="header__nav-item"><a href="{% url 'menu' %}">Menu</a></li>
                 {% if user.is_staff %}
-                    <li class="header__nav-item"><a href="{% url 'orders' %}">Pedidos</a></li>
+                    <li class="header__nav-item"><a href="{% url 'pending-orders' %}">Pedidos</a></li>
+                {% else %}
+                    <li class="header__nav-item headerlogin"><a href="{% url 'orders' %}">Pedidos</a></li>
                 {% endif %}
                 {% if user.username %}
-                    <li class="header__nav-item headerlogin"><a href="#">Mi Perfil</a></li>
+                    <li class="header__nav-item headerlogin"><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
+                    <li class="header__nav-item headerlogin"><form method="POST" action="{% url 'logout' %}" class="headerlogin">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-button headerlogin">Logout</button></form>
+                    </li>
+                    
                 {% else %}
                     <li class="header__nav-item headerlogin"><a href="{% url 'login' %}">Log In</a></li>
                 {% endif %}
