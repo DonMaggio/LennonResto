@@ -3,6 +3,7 @@
     flex-direction: column;
     align-content: center;
     align-items: center;
+    padding-top: 40px;
 }
 .tab-content{
     display: flex;
@@ -19,8 +20,9 @@
 
 .category__title {
     font-size: 2.3rem;
-    padding: 20px;
+    padding: 10px;
     margin-bottom: 0;
+    
 }
 
 .pedido-list {

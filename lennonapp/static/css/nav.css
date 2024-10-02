@@ -76,6 +76,10 @@ header{
     z-index: -1
 }
 
+.header__nav{
+    padding-left: 65px;
+}
+
 .header__checkbox{
     display: none;
 }
@@ -244,6 +248,7 @@ header{
         font-weight: 500;
         color: #262626;
         font-size: 0.9rem;
+        
     }
     
     .dropdown ul li {

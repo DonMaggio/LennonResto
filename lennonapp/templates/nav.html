@@ -33,7 +33,7 @@
                     <li class="header__nav-item headerlogin"><a href="{% url 'orders' %}">Pedidos</a></li>
                 {% endif %}
                 {% if user.username %}
-                    <li class="header__nav-item headerlogin"><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
+                    <li class="header__nav-item headerlogin"><a href="{% url 'password_change' %}">Cambiar Contraseña</a></li>
                     <li class="header__nav-item headerlogin"><form method="POST" action="{% url 'logout' %}" class="headerlogin">
                         {% csrf_token %}
                         <button type="submit" class="dropdown-button headerlogin">Logout</button></form>
@@ -52,11 +52,12 @@
                             <span class="saludo-span">Hola {{ user.username|upper }}<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#262626dd"><path d="M480-384 288-576h384L480-384Z"/></svg></span>
                             <div class="dropdown">
                                 <ul>
+                                    <li><a href="{% url 'orders' %}">Mis Pedidos</a></li>
+                                    <li><a href="{% url 'password_change' %}">Cambiar Contraseña</a></li>
                                     <li><form method="POST" action="{% url 'logout' %}">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-button">Logout</button></form>
                                     </li>
-                                    <li><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
                                 </ul>
                             </div>
                         </li>
