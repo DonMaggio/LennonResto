@@ -71,11 +71,12 @@ document.querySelectorAll('.modal-btn').forEach(button => {
             if (!response.ok) {
                 throw new Error('Error en la solicitud');
             }
-            return response.json();
+            
         })
         .then(data => {
             console.log('Éxito:', data);
             // Aquí puedes agregar lógica para mostrar un mensaje de éxito
+            window.location.href = '/menu'; // Redirigir a la página de menú
         })
         .catch(error => {
             console.error('Error:', error);

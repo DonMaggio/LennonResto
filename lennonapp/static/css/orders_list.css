@@ -10,9 +10,7 @@
     display: flex;
     flex-direction: column;
     margin: 0;
-    width: 80%;
-    container-name: pedido;
-    container-type: inline-size;
+    width: 70%;
 }
 .tab-content-title{
     display: flex;
@@ -30,19 +28,20 @@
 
 .pedido-list {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(1,1fr);
     grid-template-rows: repeat(auto-fill, auto);
     margin: 0;
+    padding: 0px 15px;
     list-style-type: none;
-    margin: 0;
-    gap: 30px;    
+    gap: 10px;
+    
 }
 
 .pedido-item {
     background-color: white;
     border-radius: 10px;
     padding: 15px;
-    margin: 10px 0;
+    margin: 8px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -50,10 +49,13 @@
 }
 
 .pedido-item-cabecera{
+    padding: 0 10px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: 600;
+    
 }
 
 .pedido-item-detalle{
@@ -80,22 +82,12 @@
     ;
 }
 
+
+
 .btn-ver-detalles {
     background-color: #3f6ea1dd;
 }
 
 .btn-ver-detalles:hover {
     background-color: #3f6ea1bb;
-}
-
-@container pedido (max-width: 55rem){
-    .pedido-list{
-        grid-template-columns: repeat(2,1fr);
-    }
-}
-
-@container pedido (max-width: 600px){
-    .pedido-list{
-        grid-template-columns: 1fr;
-    }
 }

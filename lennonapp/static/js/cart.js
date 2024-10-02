@@ -56,7 +56,7 @@ document.querySelectorAll('.confirm-order').forEach(button => {
             if (!response.ok) {
                 throw new Error('Error en la solicitud');
             }
-            return response.json();
+            return response;
         })
         .then(data => {
             console.log('Éxito:', data);

@@ -55,7 +55,7 @@ header{
     text-align: center;
     font-size: 24px;
     height: 100%;
-
+    padding-right: 8px;
 }
 
 .header__open-nav-button{
@@ -64,7 +64,9 @@ header{
     font-weight: 500;
     position: absolute;
     right: 10px;
-    padding: 15px;
+    padding: 0px 30px;
+    padding-bottom: 5px;
+    cursor: pointer;
     
 }
 .header__nav, .header__rigth{
@@ -74,6 +76,10 @@ header{
     width: 100vw;
     top: 0;
     z-index: -1
+}
+
+.header__nav{
+    display: none;
 }
 
 .header__checkbox{
@@ -96,7 +102,6 @@ header{
 }
 
 .header__logo-container{
-    max-width: 100%;
     margin: 0px;
     margin-left: 30px;
     display: flex;
@@ -153,6 +158,32 @@ header{
     text-decoration: none;
 }
 
+.cart{
+    position: relative;
+    align-items: center;
+}
+
+.header__nav-item-count{
+    position: absolute;
+    top: 0.3rem; /* Ajusta este valor según necesites */
+    right: 0; /* Coloca este valor para alinearlo al icono */
+    background-color: red; /* Color de fondo para visibilidad */
+    color: white;
+    border-radius: 50%; /* Hace que el fondo sea circular */
+    text-align: center; /* Centra el texto */
+    padding-top: 0.1em;/* Espaciado interno */
+    font-size: 0.35em;
+    width: 1.25em;
+    font-weight: 800;
+}
+
+.headerlogout{
+    font-size: 24px;
+    font-family: 'Rajdhani', sans-serif;
+    color: #262626;
+    font-weight: 500;
+}
+
 /* ---- HEADER QUERIES ---- */
 
 @container header (min-width: 600px){
@@ -160,6 +191,10 @@ header{
         height: 8vh;
         position: fixed;
 
+    }
+
+    .header__logo-container{
+        width: 10rem;
     }
 
     .header__nav{
@@ -179,11 +214,14 @@ header{
     }
 
     .header__rigth{
+        min-width: 10rem;
         display: block;
         position: static;
         width: auto;
         justify-content: space-between;
         margin-right: 40px;
+        align-items: center
+        
     }
 
     .header__rigth-list{
@@ -191,19 +229,21 @@ header{
         height: auto;
         width: auto;
         gap: 15px;
-        padding: 8px;
+        padding: 10px;
+        justify-content: right;
     }
 
     .header__nav-item-login{
         display: flex;
         flex-direction: column;
         padding: 0;
-        margin: 0;
         font-size: 0.6rem;
         font-weight: 600;
         line-height: 1;
-        
-        
+    }
+
+    .query{
+        display: none;
     }
 
     .login{
@@ -244,6 +284,7 @@ header{
         font-weight: 500;
         color: #262626;
         font-size: 0.9rem;
+        
     }
     
     .dropdown ul li {
@@ -260,8 +301,6 @@ header{
     }
     
 }
-
-
 
 /* ---- HEADER ENDS ---- */
 
