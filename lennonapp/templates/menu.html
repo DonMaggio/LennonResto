@@ -30,7 +30,7 @@
                     </button>
                     {% else %}
                         {% if user.username %}
-                    <button class="open-modal-btn" id="open-btn">AGREGAR AL PEDIDO</button>
+                    <button class="open-modal-btn" id="open-btn">SUMAR AL PEDIDO</button>
                         {% else %}
                         <button class="login-btn" onclick=window.location.href="{% url 'login' %}">AGREGAR AL PEDIDO</button>
                         {% endif %}
@@ -50,7 +50,7 @@
                             </div>
                             
                             <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
-                                <span>AGREGAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
+                                <span>SUMAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
                             </button>
                         </div>
                     </div>

@@ -7,28 +7,22 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/orders.css' %}">  <!-- CSS específico para pedidos.html -->
+<link rel="stylesheet" href="{% static 'css/orders_list.css' %}">  <!-- CSS específico para pedidos.html -->
 {% endblock %}
 
 {% block content %}
 <section id="pedidos" class="category">
     <h2 class="category__title">PEDIDOS</h2>
     
-    <!--<div class="tabs">
-        <button class="tab-button active" onclick="showTab('pendientes')">Pendientes</button>
-        <button class="tab-button" onclick="showTab('realizados')">Realizados</button>
-    </div>-->
-    
     <div id="pendientes" class="tab-content active">
-        <div class="tab-content-title"><h3>Pedidos Pendientes de entrega:</h3></div>
+        <div class="tab-content-title"><h3>Pedidos pendientes de entrega:</h3></div>
         <ul class="pedido-list">
             {% for pedido in orders %}
+                {% if pedido.status %}
             <li class="pedido-item">
                 <div class="pedido-item-cabecera">
                     <span>Pedido N°: {{ pedido.id }}</span>
-                    <span>U:{{ pedido.user }}</span>
                     <span>{{ pedido.Date }}</span>
-                    <span>Tot   : ${{ pedido.total }}</span>
                 </div>
                 <div>
                     <ul class="pedido-item-detalle">
@@ -41,6 +35,30 @@
                     </ul>
                 </div>
             </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="tab-content-title"><h3>Pedidos entregados:</h3></div>
+        <ul class="pedido-list">
+            {% for pedido in orders %}
+                {% if not pedido.status %}
+            <li class="pedido-item">
+                <div class="pedido-item-cabecera">
+                    <span>Pedido N°: {{ pedido.id }}</span>
+                    <span>{{ pedido.Date }}</span>
+                </div>
+                <div>
+                    <ul class="pedido-item-detalle">
+                        {% for order in pedido.order_items %}
+                        <li>
+                            <span>{{ order.quantity }}</span>
+                            <span>{{ order.name }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
