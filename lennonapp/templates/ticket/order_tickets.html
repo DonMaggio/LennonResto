@@ -1,57 +1,77 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Pedido</title>
+    <title>Ticket de Compra</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
+            background-color: #f7f7f7;
         }
-        .container {
-            max-width: 600px;
+        .ticket {
+            max-width: 380px;
             margin: 20px auto;
-            padding: 20px;
+            padding: 15px;
+            background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 4px;
         }
         h1 {
-            color: #333;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info {
+            margin-bottom: 10px;
+        }
+        .info p {
+            margin: 2px 0;
+            font-size: 14px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 10px;
         }
         th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            padding: 5px;
             text-align: left;
         }
         th {
-            background-color: #f4f4f4;
+            border-bottom: 1px solid #000;
+        }
+        td {
+            border-bottom: 1px dotted #000;
         }
         .total {
+            font-size: 16px;
             font-weight: bold;
             text-align: right;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="ticket">
+        <h1>Ticket de Compra</h1>
         {% for order in orders %}
-        <h1>Detalles del Pedido</h1>
-        <h2>Usuario {{ order.user }},</h2>
-        <p><strong>Fecha:</strong> {{ order.Date }}</p>
-        <p><strong>Total:</strong> ${{ order.total }}</p>
+        <div class="info">
+            <p><strong>Usuario:</strong> {{ order.user }}</p>
+            <p><strong>Fecha:</strong> {{ order.Date }}</p>
+        </div>
+
         <table>
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Precio Total</th>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Precio U.</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,9 +85,9 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p class="total">Total del pedido: ${{ order.total }}</p>
+
+        <p class="total">Total: ${{ order.total }}</p>
         {% endfor %}
     </div>
 </body>
 </html>
-
