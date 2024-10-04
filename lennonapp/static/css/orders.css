@@ -60,6 +60,13 @@
     list-style-type: none;
     padding: 10px;
     text-align: left;
+}
+
+.pedido-item-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
 
 }
 
@@ -71,21 +78,30 @@
     background-color: #ff2a2aee;
     font-weight: 600;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.9rem
-    
+    font-size: 0.9rem;
 }
 
 .btn:hover {
     background-color: #ff2a2abb;
-    ;
 }
 
 .btn-ver-detalles {
     background-color: #3f6ea1dd;
+    align-content: center;
 }
 
-.btn-ver-detalles:hover {
+.btn-ver-detalles:hover, .imprimir:hover {
     background-color: #3f6ea1bb;
+}
+
+.imprimir{
+    background-color: #3f6ea1dd;
+    padding: 2px 5px 0px 5px;
+    margin: 0;
+}
+
+.imprimir span{
+    height: 20px;
 }
 
 @container pedido (max-width: 55rem){
