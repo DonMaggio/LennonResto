@@ -44,6 +44,10 @@ document.querySelectorAll('.confirm-order').forEach(button => {
             user: userId,
         };
 
+        // Mostrar el loader
+        const loader = document.getElementById("loader");
+        loader.style.display = "flex";
+
         fetch('http://127.0.0.1:8000/orders/', {
             method: 'POST',
             headers: {
@@ -69,6 +73,7 @@ document.querySelectorAll('.confirm-order').forEach(button => {
             const closeModal = document.querySelector('.close');
             closeModal.onclick = function() {
                 modal.style.display = "none";
+                loader.style.display = "none"; // Ocultar loader
                 location.reload();
             };
 
@@ -76,6 +81,7 @@ document.querySelectorAll('.confirm-order').forEach(button => {
             window.onclick = function(event) {
                 if (event.target === modal) {
                     modal.style.display = "none";
+                    loader.style.display = "none"; // Ocultar loader
                     location.reload();
                 }
             };
@@ -83,6 +89,11 @@ document.querySelectorAll('.confirm-order').forEach(button => {
         .catch(error => {
             console.error('Error:', error);
             // Aquí puedes manejar errores
+        })
+
+        .then(() => {
+            // Ocultar el loader al final
+            loader.style.display = "none";
         });
     });
 });
