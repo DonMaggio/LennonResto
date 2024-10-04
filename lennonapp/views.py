@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 
 from django.template.loader import get_template
 
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 from rest_framework.response import Response
@@ -34,13 +34,6 @@ from .utils import rendertopdf
 ## View generica
 def home(request):
     return render(request, 'home.html')
-
-"""
-@api_view()
-@permission_classes([IsAuthenticated])
-def secret(request):
-    return Response({'message':'Mensaje secreto'})
-"""
 
 ## View del menu completo
 class MenuItemView(generics.ListAPIView):
@@ -284,17 +277,6 @@ class CompletedOrdersView(LoginRequiredMixin, generics.ListAPIView):
         return Response({'orders':serializer.data})
 
 
-"""
-## Vistas para la gestion de usuarios ##
-#Lista de todos los usuarios
-class UserView(generics.ListCreateAPIView):#
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    #permission_classes = [IsAuthenticated]
-    #permission_classes = [IsAuthenticatedOrReadOnly]
-    #permission_classes = [IsAdminUser]
-"""
-
 #Registro de usuarios
 class UserRegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -315,7 +297,7 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'registration/password_change.html'
     success_url = reverse_lazy('menu')
 
-
+"""
 ## Utilizacion de viewsets ##
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -332,9 +314,13 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response({'orders':serializer.data})
+"""
 
 #Impresion de Order
-class PrintOrder(generics.ListAPIView):
+class PrintOrder(LoginRequiredMixin, generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    login_url = "menu"
+    redirect_field_name = "redirect_to"
     serializer_class = OrdersSerializer
     queryset = Order.objects.all()
 
@@ -348,57 +334,3 @@ class PrintOrder(generics.ListAPIView):
         data = {'orders':serializer.data}
         pdf = rendertopdf('ticket/order_tickets.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
-
-
-"""
-class ManagerUsersView(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        # Get the 'manager' group
-        manager_group = Group.objects.get(name='Manager')
-        # Get the users in the 'manager' group
-        queryset = User.objects.filter(groups=manager_group)
-        return queryset
-
-    def perform_create(self, serializer):
-        # Assign the user to the 'manager' group
-        manager_group = Group.objects.get(name='Manager')
-        user = serializer.save()
-        user.groups.add(manager_group)
-
-class ManagerSingleUserView(generics.RetrieveDestroyAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        # Get the 'manager' group
-        manager_group = Group.objects.get(name='Manager')
-        # Get the users in the 'manager' group
-        queryset = User.objects.filter(groups=manager_group)
-        return queryset
-
-class DeliveryUserView(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        delivery_group = Group.objects.get(name='Delivery')
-        queryset = User.objects.filter(groups=delivery_group)
-        return queryset
-
-    def perform_create(self, serializer):
-        delivery_group = Group.objects.get(name='Delivery')
-        user = serializer.save()
-        user.groups.add(delivery_group)
-
-class DeliveryUserSingleView(generics.RetrieveDestroyAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        delivery_group = Group.objects.get(name='Delivery')
-        queryset = User.objects.filter(groups=delivery_group)
-        return queryset
-"""
