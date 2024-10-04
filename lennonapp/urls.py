@@ -5,14 +5,14 @@ from .views import CustomPasswordChangeView, CreateMenuItemView, PrintOrder, Ord
 from rest_framework.documentation import include_docs_urls
 
 #View Sets
-from .views import ProductViewSet
+#from .views import ProductViewSet
 from . import views
 from rest_framework.routers import DefaultRouter
 
 from rest_framework.authtoken.views import obtain_auth_token
 
 router = DefaultRouter()
-router.register(r'products', ProductViewSet, basename='productos')
+#router.register(r'products', ProductViewSet, basename='productos')
 
 
 urlpatterns = [
