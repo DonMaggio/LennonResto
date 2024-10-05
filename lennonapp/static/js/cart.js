@@ -8,7 +8,7 @@ document.querySelectorAll('.cart__item-edit').forEach(button => {
             menuitem: itemId,
         };
 
-        fetch('http://127.0.0.1:8000/cart/menu-items', {
+        fetch('/cart/menu-items', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ document.querySelectorAll('.confirm-order').forEach(button => {
         const loader = document.getElementById("loader");
         loader.style.display = "flex";
 
-        fetch('http://127.0.0.1:8000/orders/', {
+        fetch('/orders/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
