@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'lennonproject.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=env.str('DATABASE_URL'),
         conn_max_age=600
     )
 }
