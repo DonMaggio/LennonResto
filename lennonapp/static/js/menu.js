@@ -59,7 +59,7 @@ document.querySelectorAll('.modal-btn').forEach(button => {
             quantity: parseInt(quantity, 10) // Convertir a número entero
         };
 
-        fetch('http://127.0.0.1:8000/cart/menu-items', {
+        fetch('/cart/menu-items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,6 +105,6 @@ document.querySelectorAll('.modal-btn').forEach((button, index) => {
 
 function redirectToItem(itemId) {
     console.log("Redirecting to item:", itemId); 
-    window.location.href = 'http://127.0.0.1:8000/menu-items/'+itemId ; // Asumiendo que la URL espera un ID
+    window.location.href = '/menu-items/'+itemId ; // Asumiendo que la URL espera un ID
 }
 

@@ -1,14 +1,66 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends 'nav.html' %}
+{% csrf_token %}
 
-<h1>Hello {{ request.user }}!</h1>
-<p>Welcome to the jungle!</p>
-<a href="{% url 'menu' %}">Ir al menu</a>
+{% block extra_meta %}
+<meta name="csrf-token" content="{% csrf_token %}">
+{% endblock %}
 
-<h2>
+{% block title %}
+Lennon Resto - Nosotros
+{% endblock %}
 
-</h2>
+{% block extra_css %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">  <!-- CSS específico para main.html -->
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<head>
+    <style>
+        
+    </style>
+</head>
+
+<section id="about" class="about">
+    <h1>Bienvenidos al mejor restaurante de Flores: Lennon Resto</h1>
+
+    <div class="logo">
+        {% load static %}
+        <img src="{% static 'images/lennonglasses.png' %}" alt="logo de Lennon" class="logo-img">
+        <p class="logo-p">LENNON</p>
+    </div>
+    
+    <div class="about__section">
+        <h2>Nuestra Historia</h2>
+        <p>En Lennon, creemos que cada plato cuenta una historia. Fundado en el corazón de Flores, Buenos Aires, nuestro restaurante combina tradición y modernidad, ofreciendo una experiencia culinaria única que celebra los sabores locales.</p>
+    </div>
+
+    <div class="about__section">
+        <h2>Nuestro Equipo</h2>
+        <p>Un apasionado equipo de chefs y servidores se dedica a brindarte el mejor servicio. Nos enorgullece utilizar ingredientes frescos y de alta calidad, trabajamos juntos para crear un ambiente acogedor y memorable para nuestros clientes.</p>
+    </div>
+
+    <div class="about__section">
+        <h2>Nuestra Filosofía</h2>
+        <p>La comida es un arte y cada comida es una obra maestra. En Lennon, nuestra filosofía es ofrecer un menú que no solo satisface el paladar, sino que también alimenta el alma. Te invitamos a disfrutar de una experiencia gastronómica que va más allá de la simple comida.</p>
+    </div>
+
+    <div class="map-container">
+        <h2>Ubicación</h2>
+        <div id="map"></div>
+        <p>Visítanos en Av. Rivadavia, Flores, Buenos Aires.</p>
+        
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Lennon Resto. Todos los derechos reservados.</p>
+    <p>Hecho desde Argentina con amor &hearts;</p>
+</footer>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/home.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+{% endblock %}

@@ -17,7 +17,7 @@
 <main>
     <section id="add-item">
         <h2>Agregar Item al Menú</h2>
-        <form id="add-item-form" method="POST" >
+        <form id="add-item-form" method="POST" enctype="multipart/form-data" >
             {% csrf_token %}
             
             <div class="form-group">
