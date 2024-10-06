@@ -153,7 +153,9 @@ h1, h2 {
     margin: 15% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 18%; 
+    width: 350px;
+    min-width: 30vw;
+    max-width: 90%;
     border-radius: 8px;
     font-size: 18px;
     align-items: center;
