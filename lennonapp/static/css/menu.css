@@ -257,6 +257,13 @@ input[type="number"] {
     padding: 5px;
     
 }
+
+.error-message {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: red;
+}
+
 .total-price{
     padding: 5px;
 }

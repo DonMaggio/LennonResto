@@ -53,7 +53,12 @@ document.querySelectorAll('.modal-btn').forEach(button => {
         const modal = this.closest('.modal');
         const overlay = modal.closest('.overlay'); // Obtén el overlay
         const quantity = modal.querySelector('.quantity-input').value; // Obtener el valor de la cantidad
+        const errorMessage = modal.querySelector('.error-message'); // Selecciona el mensaje de error
 
+        // Limpiar el mensaje de error antes de realizar la solicitud
+        errorMessage.textContent = "";
+        errorMessage.style.display = 'none';
+        
         const data = {
             menuitem: itemId,
             quantity: parseInt(quantity, 10) // Convertir a número entero
@@ -81,6 +86,8 @@ document.querySelectorAll('.modal-btn').forEach(button => {
         .catch(error => {
             console.error('Error:', error);
             // Aquí puedes manejar errores
+            errorMessage.textContent = "No se pudo agregar el ítem, probablemente ya tengas este plato en tu carrito!"; // Muestra el mensaje de error
+            errorMessage.style.display = 'block'; // Muestra el contenedor
         });
     });
 });
@@ -95,13 +102,7 @@ document.querySelectorAll('.quantity-input').forEach(input => {
     });
 });
 
-// Cierra el modal al hacer clic en el botón
-document.querySelectorAll('.modal-btn').forEach((button, index) => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.overlay')[index].style.visibility = 'hidden';
-        document.body.classList.remove('no-scroll'); // Restaurar el scroll
-    });
-});
+
 
 function redirectToItem(itemId) {
     console.log("Redirecting to item:", itemId); 

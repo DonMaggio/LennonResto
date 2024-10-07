@@ -42,13 +42,15 @@
                         <img src='../media/{{item.image}}' alt="" class="category__card-img">
                         <h2>{{ item.title }}</h2>
                         <p>{{ item.description }}</p>
+
+                        <div class="error-message" style="color: red; display: none;"></div> <!-- Contenedor para el mensaje de error -->
+
                         <div class="modal-lastline">
                             <div class="modal-lastline-quantity">
                                 <button id="btn-decrease"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M200-440v-80h560v80H200Z"/></svg></button>
                                 <input type="number" id="miInput"  class="quantity-input" min="1" value="1">
                                 <button id="btn-increase"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#101632dd"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg></button>
                             </div>
-                            
                             <button class="modal-btn" data-item-id="{{ item.id }}" data-item-price="{{ item.price }}">
                                 <span>SUMAR AL PEDIDO</span> <span class="total-price">${{ item.price }}</span>
                             </button>

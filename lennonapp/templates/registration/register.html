@@ -17,21 +17,36 @@
         <h2>Crear Cuenta</h2>
         <form id="register-form" method="POST" action="{% url 'register' %}" class="register-form">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="error">{{ form.non_field_errors }}</div>
+            {% endif %}
             <div class="form-group">
                 <label for="username">Nombre de Usuario</label>
                 {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
             </div>
             <div class="form-group">
-                <label for="password">E-mail</label>
+                <label for="email">E-mail</label>
                 {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors }}</div>
+                {% endif %}
             </div>
             <div class="form-group">
-                <label for="password">Contraseña</label>
+                <label for="password1">Contraseña</label>
                 {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="error">{{ form.password1.errors }}</div>
+                {% endif %}
             </div>
             <div class="form-group">
-                <label for="confirm_password">Confirmar Contraseña</label>
+                <label for="password2">Confirmar Contraseña</label>
                 {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="error">{{ form.password2.errors }}</div>
+                {% endif %}
             </div>
             <input type="submit" value="Registrarse" id="register-button">
             <div class="crear__cuenta">
@@ -41,6 +56,7 @@
     </section>
 </main>
 {% endblock %}
+
 
 
 

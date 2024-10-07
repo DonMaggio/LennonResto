@@ -56,6 +56,16 @@ input {
     align-items: start;
 }
 
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    list-style-type: none;
+}
+
+ul{
+    list-style-type: none;
+}
 #register-button {
     padding: 0.5rem;
     margin-top: 10px;

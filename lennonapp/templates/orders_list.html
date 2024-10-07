@@ -18,7 +18,7 @@
         <div class="tab-content-title"><h3>Pedidos pendientes de entrega:</h3></div>
         <ul class="pedido-list">
             {% for pedido in orders %}
-                {% if pedido.status %}
+                {% if not pedido.status %}
             <li class="pedido-item">
                 <div class="pedido-item-cabecera">
                     <span>Pedido N°: {{ pedido.id }}</span>
@@ -41,7 +41,7 @@
         <div class="tab-content-title"><h3>Pedidos entregados:</h3></div>
         <ul class="pedido-list">
             {% for pedido in orders %}
-                {% if not pedido.status %}
+                {% if pedido.status %}
             <li class="pedido-item">
                 <div class="pedido-item-cabecera">
                     <span>Pedido N°: {{ pedido.id }}</span>
