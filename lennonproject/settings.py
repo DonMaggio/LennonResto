@@ -158,10 +158,6 @@ if not DEBUG:
 # STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 # STATIC_URL = '/static/'
 
-# Ruta donde se guardan los archivos de medios subidos por los usuarios
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
 
 # Configuración de Cloudinary
 CLOUDINARY_STORAGE = {
@@ -172,6 +168,10 @@ CLOUDINARY_STORAGE = {
 
 # Almacenamiento de archivos multimedia en Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Ruta donde se guardan los archivos de medios subidos por los usuarios
+MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 # Default primary key field type
