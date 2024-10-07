@@ -31,6 +31,11 @@
                     <div class="error">{{ form.password.errors }}</div>
                 {% endif %}
             </div>
+            {% if form.errors %}
+                {% for error in form.non_field_errors %}
+                <li class="error">{{ error }}</li>
+                {% endfor %}
+            {% endif %}
             <input type="submit" value="Iniciar sesión" id="login-button">
             <div class="crear__cuenta">
                 <span>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate</a> </span>

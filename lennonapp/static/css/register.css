@@ -16,6 +16,10 @@ main {
     padding: 2rem;
 }
 
+ul{
+    list-style-type: none;
+}
+
 #register {
     margin-top: 50px;
     display: flex;
@@ -63,9 +67,7 @@ input {
     list-style-type: none;
 }
 
-ul{
-    list-style-type: none;
-}
+
 #register-button {
     padding: 0.5rem;
     margin-top: 10px;
