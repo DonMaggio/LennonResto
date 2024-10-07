@@ -281,7 +281,7 @@ class CompletedOrdersView(LoginRequiredMixin, generics.ListAPIView):
 class UserRegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('menu')
+    success_url = reverse_lazy('login')
     
     def form_valid(self, form):
         user = form.save()
