@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'lennonapp',
     'rest_framework',
     'rest_framework.authtoken',
+    'cloudinary',
+    'cloudinary_storage',
     #'djoser',
 ]
 
@@ -152,13 +154,25 @@ if not DEBUG:
     # and renames the files with unique names for each version to support long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Opcional: para archivos estáticos con Cloudinary
+# STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+# STATIC_URL = '/static/'
+
 # Ruta donde se guardan los archivos de medios subidos por los usuarios
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-# Ruta donde se guardan los archivos estáticos como CSS o JS
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Configuración de Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+# Almacenamiento de archivos multimedia en Cloudinary
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
