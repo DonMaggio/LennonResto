@@ -21,7 +21,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 class MenuDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    image = serializers.ImageField(required=True)
+    image = serializers.ImageField(required=False)
     description = serializers.CharField(required=True)
     #category = serializers.StringRelatedField()
     #category = CategorySerializer(read_only=False)

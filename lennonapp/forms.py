@@ -12,17 +12,17 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está registrado.")
+            raise forms.ValidationError("The email address is already registered.")
         return email
     
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if len(username) < 4:
-            raise forms.ValidationError("El nombre de usuario debe tener al menos 4 caracteres.")
+            raise forms.ValidationError("The username must be at least 4 characters long.")
         if not username.isalnum():
-            raise forms.ValidationError("El nombre de usuario solo puede contener letras y números.")
+            raise forms.ValidationError("The username can only contain letters and numbers.")
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Este usuario ya está registrado.")
+            raise forms.ValidationError("This user is already registered.")
         return username
 
     def save(self, commit=True):

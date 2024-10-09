@@ -17,7 +17,7 @@
 <main>
     <section id="add-item">
         <h2>Modificar Item del Menú</h2>
-        <form id="edit-item-form" method="PUT" class="edit-item-form">
+        <form id="edit-item-form" method="POST" class="edit-item-form">
             {% csrf_token %}
             
             <div class="form-group">
@@ -33,8 +33,9 @@
             <div class="form-group">
                 <label for="image">Imagen:</label>
                 <input type="file" id="image" name="image" accept="image/*">
-                <input type="hidden" id="existing-image" name="existing-image" value="{{ image }}">
+                <input type="hidden" id="existing-image" name="existing-image" value="{{ image.url }}">
             </div>
+
 
             <div class="form-group">
                 <label for="description">Descripción:</label>

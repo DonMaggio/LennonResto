@@ -13,7 +13,7 @@
 {% block content %}
 <section id="pedidos" class="category">
     <h2 class="category__title">PEDIDOS</h2>
-    
+    {% if orders %}
     <div id="pendientes" class="tab-content active">
         <div class="tab-content-title"><h3>Pedidos pendientes de entrega:</h3></div>
         <ul class="pedido-list">
@@ -62,6 +62,17 @@
             {% endfor %}
         </ul>
     </div>
+    {% else %}
+    <div>
+        <ul class="pedido-list">
+            <li class="pedido-item">
+                <div class="pedido-item-cabecera">
+                    <span>Aún no has realizado pedidos.</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
 </section>
 {% endblock %}
 
